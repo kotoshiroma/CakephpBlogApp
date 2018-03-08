@@ -6,9 +6,44 @@ class Post extends AppModel {
 
 	public $name = 'Post';
 	public $actsAs = array('Search.Searchable');
+	// public $filterArgs = array (
+	// 	'category_id' => array ('type' => 'value'),
+	// 	// 'tag_id' => array ('type' => 'value') postsテーブルにはtag_idカラムは無い
+	// 	'Tag.tag_id' => array ('type' => 'value')
+	// );
+
 	public $filterArgs = array (
-		'title' => array ('type' => 'like')
+		array('name' => 'keyword',
+			  'type' => 'like',
+		      'field' => 'Post.title',
+			  // 'connectorAnd' => '+',
+			  // 'connectorOr' => ','
+		),
+		array('name' => 'category_id',
+			  'type' => 'value',
+		      'field' => 'Post.category_id'
+		),
+		array('name' => 'tag_id',
+			  'type' => 'subquery',
+			  'method' => 'findByTags',
+		  	  // 'field' => 'Tag.id')
+			  'field' => 'Post.id'
+		)
 	);
+
+	public function findByTags($data = array()) {
+	    $this->PostTag->Behaviors->attach('Containable', array('autoFields' => false));
+	    $this->PostTag->Behaviors->attach('Search.Searchable');
+	    $query = $this->PostTag->getQuery('all',array(
+	        'conditions' => array(
+	            'tag_id' => $data['tag_id']
+	        ),
+	        'fields' => array('post_id'),
+	        'contain' => array('Tag')
+	    ));
+	    return $query;
+	}
+
 
 	public $belongsTo = array(
 		'User' => array(
@@ -30,7 +65,11 @@ class Post extends AppModel {
 	public $hasAndBelongsToMany = array (
 		'Tag' => array (
 			'className' => 'Tag',
-			// 'order' => 'tag'
+			'joinTable' => 'post_tags',
+			'foreignKey' => 'post_id',
+			'associationForeignKey' => 'tag_id',
+			'with' => 'PostTag',
+			'unique' => true
 		 )
 	 );
 
@@ -40,7 +79,8 @@ class Post extends AppModel {
 			 'foreignKey' => 'post_id',
 			 'conditions' => array(
 			  // 'Image.model' => 'Post',
-			  'Image.active' => 1
+			  // 'Image.active' => 1
+			  'Image.delete_flag' => 0
 			 )
 		 )
 	 );

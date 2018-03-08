@@ -1,5 +1,20 @@
 <!-- ACL post index-->
+
 <div class="posts index">
+
+	<div align="right">
+		<?php echo $auth->user('username'); ?>
+		<?php
+			$user_id = $auth->user('id');
+			if (isset($user_id)) {
+				echo $this->Html->link('Logout', array('controller' => 'users', 'action' => 'logout'));
+
+			} else {
+				echo $this->Html->link('Login', array('controller' => 'users', 'action' => 'login'));
+			}
+		?>
+	</div>
+
 	<h2><?php echo __('Posts'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<thead>
@@ -63,14 +78,11 @@
 		<?php echo $this->Form->create('Post', array('url'=>'index')); ?>
 			<fieldset>
 				<legend>Search</legend>
-				<!-- <?php echo $this->Form->input('Categories', array ('type' => 'select',
-																   'options' => $categories)); ?> -->
-
+				<?php echo $this->Form->input('keyword'); ?>
 				<?php echo $this->Form->input('category_id', array ('label' => 'Categories',
 																	'multiple' => 'select')); ?>
 				<?php echo $this->Form->input('tag_id', array ('label' => 'Tags',
 															   'multiple' => 'checkbox')); ?>
-
 			</fieldset>
 		<?php echo $this->Form->end('検索'); ?>
 	</div>

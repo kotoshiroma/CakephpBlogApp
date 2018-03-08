@@ -61,5 +61,7 @@ App::uses('Controller', 'Controller');
            'controller' => 'posts',
            'action' => 'index'
          );
+
+         $this->set('auth', $this->Auth);
      }
  }

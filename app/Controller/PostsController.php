@@ -6,28 +6,42 @@ App::uses('AppController', 'Controller');
 class PostsController extends AppController {
 
 	public $components = array('Paginator', 'Search.Prg');
-	// public $uses = array('Category', 'Tag');
-	public $presetVars = true;
-	// public $paginate = array ('limit' => 10);
+	public $presetVars = true; // モデルでの $filterArgs設定の有効化
+
 
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->allow('index', 'view');
+
 	}
 
 	public function index($category_id = null) {
 
-		$this->autoLayout = true;
-
 		$this->Post->recursive = 0;
-		if (!$category_id) {
-			$this->set('posts', $this->Paginator->paginate());
-		} else {
-			$this->set('posts', $this->Paginator->paginate('Post', array('Post.category_id' => $category_id)));
-		}
+		$this->Prg->commonProcess(); // ここでgetとしてリダイレクトされる(データがクエリストリング形式になる)
+
+		// debug($this->passedArgs);
+		// debug($this->request);
+		// exit;
+
+		// $this->Paginator->settings = array('conditions' => array('Post.delete_flag' => 0),
+		// 								   'order' => array('Post.id' => 'desc'));
+		// if (!$category_id) {
+		// 	$this->set('posts', $this->Paginator->paginate());
+		// } else {
+		// 	$this->set('posts', $this->Paginator->paginate('Post', array('Post.category_id' => $category_id)));
+		// }
+
+
+		$this->paginate = array('conditions' => $this->Post->parseCriteria($this->passedArgs),
+								'order' => array('Post.id' => 'desc'));
+	 	$this->set('posts', $this->paginate());
+
+		// debug($this->request);
+		// debug($this->passedArgs);
+		// exit;
 
 		$this->set_categories_and_tags();
-		// $this->set('categories', $this->Category->find('all'));
 	}
 
 
@@ -36,8 +50,6 @@ class PostsController extends AppController {
 			throw new NotFoundException(__('Invalid post'));
 		}
 		$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
-		// var_dump($this->Post->find('first', $options));
-		// exit;
 		$this->set('post', $this->Post->find('first', $options));
 	}
 
@@ -50,6 +62,10 @@ class PostsController extends AppController {
 			$this->request->data['Tag'] = $this->request->data['Tag']['tag_id'];
 			$this->request->data['Post']['category_id'] = $this->request->data['Post']['category_id'][0];
 
+			if (!$this->request->data['Image'][0]['file_name']['name']) {
+				unset($this->request->data['Image']);
+			}
+
 			$this->Post->create();
 			if ($this->Post->saveAll($this->request->data)) {
 				$this->Flash->success(__('The post has been saved.'));
@@ -58,14 +74,10 @@ class PostsController extends AppController {
 				$this->Flash->error(__('The post could not be saved. Please, try again.'));
 			}
 		}
-		$users = $this->Post->User->find('list');
-		$this->set(compact('users'));
 	}
 
 
 	public function edit($id = null) {
-
-		// $this->set_categories_and_tags();
 
 		if (!$this->Post->exists($id)) {
 			throw new NotFoundException(__('Invalid post'));
@@ -73,18 +85,59 @@ class PostsController extends AppController {
 
 		if ($this->request->is(array('post', 'put'))) {
 
-			$data['Tag'] = $this->request->data['Post']['tag_id'];
-			$data['Tag'] = array_map('intval', $data['Tag']);
-			unset($this->request->data['Post']['tag_id']);
-			$data['Post'] = $this->request->data['Post'];
-			$data['Post']['category_id'] = intval($data['Post']['category_id'][0]);
 
-			// var_dump($data['Tag']);
+			// debug($this->request->data['Tag']);
+			// debug($this->request->data['Tag']['tag_id']);
+			debug($this->request->data);
 			// exit;
 
-			if ($this->Post->save($data)) {
+			$this->request->data['Tag'] = $this->request->data['Tag']['tag_id'];
+			$this->request->data['Post']['category_id'] = $this->request->data['Post']['category_id'][0];
+
+			debug($this->request->data);
+			// exit;
+
+			// 画像配列が空の場合、リクエストデータから取り除く
+			$count = count($this->request->data['Image']);
+			for ($i = 0; $i < $count; $i++) {
+				if (!$this->request->data['Image'][$i]['file_name']['name']) {
+					unset($this->request->data['Image'][$i]);
+				}
+			}
+
+			// 画像の論理削除
+			if (isset($this->request->data['chkBox'])) {
+				$this->loadModel('Image');
+				foreach ($this->request->data['chkBox'] as $id) {
+					// $this->Image->create();
+					$this->Image->save(array('id' => $id, 'delete_flag' => '1'));
+				}
+			}
+			// 更新処理
+			if ($this->Post->saveAll($this->request->data)) {
+
+				// タグ選択無しの場合、中間テーブル(post_tags)のレコードを削除する
+				if (!$this->request->data['Tag']) {
+
+					$this->loadModel('PostTag');
+					$id = $this->request->data['Post']['id'];
+					// MySql上では複合主キーだが、CakePHPでは主キー無し扱いになっている
+					// $this->PostTag->primaryKey = 'post_id';  コントローラではなくモデルにて主キーを設定する
+
+					$this->PostTag->deleteAll(array('post_id' => $id));
+					// $this->PostTag->deleteAll(array('post_id' => $id));
+					// $this->PostTag->deleteAll($id);
+					// $this->PostTag->post_id = $id;
+					// $this->PostTag->delete();
+					// debug($this->PostTag->post_id);
+					// $this->PostTag->deleteAll();
+					// exit;
+
+				}
+
 				$this->Flash->success(__('The post has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				// return $this->redirect(array('action' => 'index'));
+				$this->redirect($this->referer());
 			} else {
 				$this->Flash->error(__('The post could not be saved. Please, try again.'));
 			}
@@ -101,20 +154,19 @@ class PostsController extends AppController {
 			}
 
 			$this->set('tagVal', $tagVal);
-
+			$this->set('post', $data);
 		}
-		// $users = $this->Post->User->find('list');
-		// $this->set(compact('users'));
 	}
 
-
+	// 論理削除
 	public function delete($id = null) {
 		$this->Post->id = $id;
 		if (!$this->Post->exists()) {
 			throw new NotFoundException(__('Invalid post'));
 		}
 		$this->request->allowMethod('post', 'delete');
-		if ($this->Post->delete()) {
+
+		if ($this->Post->save(array('delete_flag' => 1))) {
 			$this->Flash->success(__('The post has been deleted.'));
 		} else {
 			$this->Flash->error(__('The post could not be deleted. Please, try again.'));
@@ -127,16 +179,14 @@ class PostsController extends AppController {
 
 		$this->loadModel('Category');
 		$this->loadModel('Tag');
+		$this->loadModel('Image');
 		$this->set('categories', $this->Category->find('list',
 													array ('fields' => array('Category.id', 'Category.category_name'))));
 		$this->set('tags', $this->Tag->find('list',
-													array ('fields' => array('Tag.id', 'Tag.tag_name'))));
+											array ('fields' => array('Tag.id', 'Tag.tag_name'))));
 
-		// var_dump($this->Tag->find('list', array ('fields' => array('Tag.id', 'Tag.tag_name'))));
+		// debug($this->Tag->find('list',
+		// 									array ('fields' => array('Tag.id', 'Tag.tag_name'))));
 		// exit;
-	}
-
-	public function format_data() {
-
 	}
 }

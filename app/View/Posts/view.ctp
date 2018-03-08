@@ -19,11 +19,9 @@
 		<dt><?php echo __('Images'); ?></dt>
 		<dd>
 			<?php
-				// debug($post['Image']);
-				// exit;
 				$baseUrl = $this->Html->url('/files/image/file_name/');
 				foreach ($post['Image'] as $image) {
-					echo $this->Html->image($baseUrl.$image['dir'].'/'.$image['file_name']);
+					echo $this->Html->image($baseUrl.$image['dir'].'/thumb_'.$image['file_name']);
 				}
 			?>
 			&nbsp;

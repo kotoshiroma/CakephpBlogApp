@@ -20,7 +20,7 @@ class UsersController extends AppController {
 	    $this->Auth->allow('index', 'view', 'logout');
 		// $this->Auth->allow('initDB');
 		// $this->initDB();
-		$this->set('auth', $this->Auth);
+		
 	}
 
 	// public function initDB() {
@@ -69,6 +69,7 @@ class UsersController extends AppController {
  */
 	public function index() {
 		$this->User->recursive = 0;
+		$this->Paginator->settings = array('conditions' => array('User.delete_flag' => 0));
 		$this->set('users', $this->Paginator->paginate());
 	}
 
@@ -87,11 +88,6 @@ class UsersController extends AppController {
 		$this->set('user', $this->User->find('first', $options));
 	}
 
-/**
- * add method
- *
- * @return void
- */
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->User->create();
@@ -145,7 +141,8 @@ class UsersController extends AppController {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		$this->request->allowMethod('post', 'delete');
-		if ($this->User->delete()) {
+		// if ($this->User->delete()) {
+		if ($this->User->save(array('delete_flag' => 1))) {
 			$this->Flash->success(__('The user has been deleted.'));
 		} else {
 			$this->Flash->error(__('The user could not be deleted. Please, try again.'));

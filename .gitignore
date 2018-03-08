@@ -28,3 +28,6 @@
 Icon?
 ehthumbs.db
 Thumbs.db
+
+#画像ファイルは除く
+/app/webroot/files/image/file_name/

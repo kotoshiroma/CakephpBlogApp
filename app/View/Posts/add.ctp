@@ -7,7 +7,7 @@
 		<?php
 		 echo $this->Form->input('title');
 		 echo $this->Form->input('body');
-		 echo $this->Form->input('Image.0.file_name', array('type' => 'file'));
+		 echo $this->Form->input('Image.0.file_name', array('type' => 'file', 'default' => NULL));
 		 // echo $this->Form->input('Image.0.model', array('type' => 'hidden', 'value' => 'Post'));
 
 		 echo $this->Form->input('category_id', array ('label' => 'Categories',
