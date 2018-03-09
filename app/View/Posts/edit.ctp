@@ -16,15 +16,10 @@
 
 	<div id="imageForms">
 		<div class="dummyForm input_file" style="display:none;">
-			<p style="display:none;"></p>
+			<p class="labelFileName" style="display:none;"></p>
 			<input type="file" name="data[Image][0][file_name]" id="Image0FileName">
 			<button class="btnDelForm" type="button">画像キャンセル</button>
 		</div>
-		<!-- <div class="input_file">
-			<p></p>
-			<input type="file" name="data[Image][0][file_name]" id="Image0FileName">
-			<button class="btnDelForm" type="button">画像キャンセル</button>
-		</div> -->
 	</div>
 
 	<?php $baseUrl = $this->Html->url('/files/image/file_name/'); ?>

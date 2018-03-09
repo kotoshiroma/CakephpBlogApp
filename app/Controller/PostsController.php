@@ -20,14 +20,6 @@ class PostsController extends AppController {
 		$this->Post->recursive = 0;
 		$this->Prg->commonProcess(); // ここでgetとしてリダイレクトされる(データがクエリストリング形式になる)
 
-		// $this->Paginator->settings = array('conditions' => array('Post.delete_flag' => 0),
-		// 								   'order' => array('Post.id' => 'desc'));
-		// if (!$category_id) {
-		// 	$this->set('posts', $this->Paginator->paginate());
-		// } else {
-		// 	$this->set('posts', $this->Paginator->paginate('Post', array('Post.category_id' => $category_id)));
-		// }
-
 		$this->paginate = array('conditions' => $this->Post->parseCriteria($this->passedArgs),
 								'order' => array('Post.id' => 'desc'));
 	 	$this->set('posts', $this->paginate());
@@ -52,7 +44,7 @@ class PostsController extends AppController {
 			$this->request->data['Tag'] = $this->request->data['Tag']['tag_id'];
 			$this->request->data['Post']['category_id'] = $this->request->data['Post']['category_id'][0];
 
-			if (!$this->request->data['Image'][0]['file_name']['name']) {
+            if ($this->request->data['Image'][0]['file_name']['name'] === "") {
 				unset($this->request->data['Image']);
 			}
 
@@ -78,13 +70,10 @@ class PostsController extends AppController {
 			$this->request->data['Tag'] = $this->request->data['Tag']['tag_id'];
 			$this->request->data['Post']['category_id'] = $this->request->data['Post']['category_id'][0];
 
-			debug($this->request->data);
-			// exit;
-
 			// 画像配列が空の場合、リクエストデータから取り除く
 			$count = count($this->request->data['Image']);
 			for ($i = 0; $i < $count; $i++) {
-				if (!$this->request->data['Image'][$i]['file_name']['name']) {
+				if ($this->request->data['Image'][$i]['file_name']['name'] === "") {
 					unset($this->request->data['Image'][$i]);
 				}
 			}
@@ -93,7 +82,6 @@ class PostsController extends AppController {
 			if (isset($this->request->data['chkBox'])) {
 				$this->loadModel('Image');
 				foreach ($this->request->data['chkBox'] as $id) {
-					// $this->Image->create();
 					$this->Image->save(array('id' => $id, 'delete_flag' => '1'));
 				}
 			}
@@ -101,21 +89,13 @@ class PostsController extends AppController {
 			if ($this->Post->saveAll($this->request->data)) {
 
 				// タグ選択無しの場合、中間テーブル(post_tags)のレコードを削除する
-				if (!$this->request->data['Tag']) {
+				if ($this->request->data['Tag'] === "") {
 
 					// MySql上では複合主キーだが、CakePHPでは主キー無し扱いになっている
 					// $this->PostTag->primaryKey = 'post_id';  コントローラではなくモデルにて主キーを設定する
 					$this->loadModel('PostTag');
 					$id = $this->request->data['Post']['id'];
 					$this->PostTag->deleteAll(array('post_id' => $id));
-					// $this->PostTag->deleteAll(array('post_id' => $id));
-					// $this->PostTag->deleteAll($id);
-					// $this->PostTag->post_id = $id;
-					// $this->PostTag->delete();
-					// debug($this->PostTag->post_id);
-					// $this->PostTag->deleteAll();
-					// exit;
-
 				}
 
 				$this->Flash->success(__('The post has been saved.'));
@@ -158,7 +138,7 @@ class PostsController extends AppController {
 	}
 
 
-	public function set_categories_and_tags() {
+	private function set_categories_and_tags() {
 
 		$this->loadModel('Category');
 		$this->loadModel('Tag');
@@ -168,8 +148,5 @@ class PostsController extends AppController {
 		$this->set('tags', $this->Tag->find('list',
 											array ('fields' => array('Tag.id', 'Tag.tag_name'))));
 
-		// debug($this->Tag->find('list',
-		// 									array ('fields' => array('Tag.id', 'Tag.tag_name'))));
-		// exit;
 	}
 }

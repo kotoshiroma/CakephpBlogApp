@@ -4,7 +4,6 @@
 
 //上記の省略形が下記
 
-// <script>
 $(function(){
   var form_cnt = 0; //画像フォームの数を保持する
 
@@ -13,12 +12,9 @@ $(function(){
   })
 
   $(document).on('click', '.btnDelForm', function(){
-    $(this).parent().remove();
+    // $(this).parent().remove();
+    $(this).closest(.copyForm).remove();
     form_cnt--;
-
-    // if (form_cnt == 0) {
-    //   addForm();
-    // }
   })
 
   function addForm() {
@@ -37,20 +33,22 @@ $(function(){
     var newForm = $('.dummyForm').clone();
     newForm.attr('style', 'display:inline;');
     newForm.attr('class', 'copyForm');
-    newForm.children('input').attr('name', newName);
-    newForm.children('input').attr('id', newId);
+    // newForm.children('input').attr('name', newName);
+    // newForm.children('input').attr('id', newId);
+    newForm.find('input').attr('name', newName);
+    newForm.find('input').attr('id', newId);
 
     $('#imageForms').append(newForm);
-    // $('.dummyForm').parent().append(newForm);
   }
 
   $(document).on('change', 'input[type="file"]', function() {
     // ファイル選択状態の場合
     if ($(this)[0].files[0]) {
       $(this).attr('style', 'display:none;');
-      $(this).prev().text($(this)[0].files[0].name);
-      $(this).prev().attr('style', 'display:block;');
+      // $(this).prev().text($(this)[0].files[0].name);
+      // $(this).prev().attr('style', 'display:block;');
+      $(this).closest('.copyForm').find('.labelFileName').text($(this)[0].files[0].name);
+      $(this).closest('.copyForm').find('.labelFileName').attr('style', 'display:block;');
     }
   })
 });
-// </script>
