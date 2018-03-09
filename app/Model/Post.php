@@ -16,8 +16,8 @@ class Post extends AppModel {
 		array('name' => 'keyword',
 			  'type' => 'like',
 		      'field' => 'Post.title',
-			  // 'connectorAnd' => '+',
-			  // 'connectorOr' => ','
+			  'connectorAnd' => ' ',
+			  'connectorOr' => ','
 		),
 		array('name' => 'category_id',
 			  'type' => 'value',

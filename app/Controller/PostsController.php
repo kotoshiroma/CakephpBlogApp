@@ -20,10 +20,6 @@ class PostsController extends AppController {
 		$this->Post->recursive = 0;
 		$this->Prg->commonProcess(); // ここでgetとしてリダイレクトされる(データがクエリストリング形式になる)
 
-		// debug($this->passedArgs);
-		// debug($this->request);
-		// exit;
-
 		// $this->Paginator->settings = array('conditions' => array('Post.delete_flag' => 0),
 		// 								   'order' => array('Post.id' => 'desc'));
 		// if (!$category_id) {
@@ -32,15 +28,9 @@ class PostsController extends AppController {
 		// 	$this->set('posts', $this->Paginator->paginate('Post', array('Post.category_id' => $category_id)));
 		// }
 
-
 		$this->paginate = array('conditions' => $this->Post->parseCriteria($this->passedArgs),
 								'order' => array('Post.id' => 'desc'));
 	 	$this->set('posts', $this->paginate());
-
-		// debug($this->request);
-		// debug($this->passedArgs);
-		// exit;
-
 		$this->set_categories_and_tags();
 	}
 
@@ -85,12 +75,6 @@ class PostsController extends AppController {
 
 		if ($this->request->is(array('post', 'put'))) {
 
-
-			// debug($this->request->data['Tag']);
-			// debug($this->request->data['Tag']['tag_id']);
-			debug($this->request->data);
-			// exit;
-
 			$this->request->data['Tag'] = $this->request->data['Tag']['tag_id'];
 			$this->request->data['Post']['category_id'] = $this->request->data['Post']['category_id'][0];
 
@@ -119,11 +103,10 @@ class PostsController extends AppController {
 				// タグ選択無しの場合、中間テーブル(post_tags)のレコードを削除する
 				if (!$this->request->data['Tag']) {
 
-					$this->loadModel('PostTag');
-					$id = $this->request->data['Post']['id'];
 					// MySql上では複合主キーだが、CakePHPでは主キー無し扱いになっている
 					// $this->PostTag->primaryKey = 'post_id';  コントローラではなくモデルにて主キーを設定する
-
+					$this->loadModel('PostTag');
+					$id = $this->request->data['Post']['id'];
 					$this->PostTag->deleteAll(array('post_id' => $id));
 					// $this->PostTag->deleteAll(array('post_id' => $id));
 					// $this->PostTag->deleteAll($id);
