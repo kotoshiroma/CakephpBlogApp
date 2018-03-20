@@ -20,8 +20,12 @@ class PostsController extends AppController {
 		$this->Post->recursive = 0;
 		$this->Prg->commonProcess(); // ここでgetとしてリダイレクトされる(データがクエリストリング形式になる)
 
-		$this->paginate = array('conditions' => $this->Post->parseCriteria($this->passedArgs),
+		// $this->paginate = array('conditions' => $this->Post->parseCriteria($this->passedArgs),
+		// 						'order' => array('Post.id' => 'desc'));
+	
+		$this->paginate = array('conditions' => array($this->Post->parseCriteria($this->passedArgs), 'Post.delete_flag' => 0),
 								'order' => array('Post.id' => 'desc'));
+
 	 	$this->set('posts', $this->paginate());
 		$this->set_categories_and_tags();
 	}
@@ -33,6 +37,7 @@ class PostsController extends AppController {
 		}
 		$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
 		$this->set('post', $this->Post->find('first', $options));
+		$this->set_categories_and_tags();
 	}
 
 
@@ -85,6 +90,7 @@ class PostsController extends AppController {
 					$this->Image->save(array('id' => $id, 'delete_flag' => '1'));
 				}
 			}
+
 			// 更新処理
 			if ($this->Post->saveAll($this->request->data)) {
 
