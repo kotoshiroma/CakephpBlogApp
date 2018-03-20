@@ -1,0 +1,191 @@
+/* header */
+.header {
+    /*height: 150px;*/
+    width: 100%;
+    /*border:2px dotted rgb(0,255,0);*/
+    margin: 0%;
+    padding: 0%;
+}
+
+
+nav.navbar {
+    margin: 0%;
+    /*background-color: rgb(0,255,0,1);*/
+}
+
+ul.navbar-right li div {
+    margin-left: 15px;
+    margin-right: 15px;
+    padding-top: 6px; 
+    color: white;
+}
+ul.navbar-right li div a {
+    color: white;
+}
+
+
+.login h4 {
+    width: 97%;
+    text-align: right;
+    /* border:2px dotted rgb(100,0,100); */
+    /* margin-left: auto; */
+    margin-right: 5px;
+    /*color: blue;*/
+}
+
+div.blog_name {
+    /*width: 970px;*/
+    margin-top: 30px;
+    margin-bottom: 40px;
+    /*background-color: rgb(0,0,255,0.3);*/
+}
+
+
+.blog_name h1 {
+    font-size: 60px;
+    margin: 0%;
+    padding-top: 15px;
+    /*background-color: rgb(0,0,255,0.6);*/
+}
+
+
+@media (min-width: 1000px) {
+    .container-fluid, div.blog_name {
+        width: 970px;
+        /*background-color: rgb(255,0,0,0.3);*/
+    }
+}
+
+
+/* body */
+div.posts,
+div.view,
+div.index {
+	/*float:left;*/
+/*	width:70%;
+    height: auto;*/
+	/*padding:10px 10% 10px 15%;*/
+    /*margin: 0%;*/
+    /*border:2px dotted rgb(0,0,255);*/
+}
+
+
+.posts .post {
+    /*margin: 30px;*/
+    /*border: 2px solid #00000066;*/
+    /*border-radius: 15px;*/
+    /*padding: 15px;*/
+}
+
+.post_body {
+    /*margin: 30px 0px;*/
+}
+
+input, textarea {
+    padding: 1%;
+    width:98%;
+	/* clear: both; */
+	/* font-size: 140%; */
+	/* font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif; */
+
+}
+
+.users {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding-top: 0%;
+    /*background-color: rgb(255,0,0,0.3);*/
+}
+
+.users h2 {
+    margin-top: 0%;
+    margin-bottom: 30px;
+    /*background-color: rgb(255,0,0,0.5);*/
+}
+
+.new_user {
+    float: right;
+    margin: 0px;
+}
+
+.btn_sm {
+    width: 60px;
+}
+
+
+.post_form {
+    margin-bottom: 50px;
+}
+
+/* sidebar */
+.sidebar {
+    margin-left: 20px;
+    /*background-color: rgb(0,255,0,0.3);*/
+    /*float:right;*/
+/*	width:30%;
+    height: auto;*/
+	/*padding:10px 80px 10px 30px;*/
+    /*border:2px solid #666;*/
+}
+
+.about {
+    background-color: rgb(0,0,0,0.07);
+    margin: 30px;
+    padding: 1px 10px 10px 10px;
+}
+
+.search {
+    background-color: rgb(0,0,0,0.07);
+    margin: 30px;
+    padding: 0px 10px 10px 10px;
+}
+
+/*.actions {
+    background-color: rgb(0,0,0,0.07);
+    margin: 30px;
+    padding: 1px 10px 10px 10px;
+}*/
+
+.archives {
+    background-color: rgb(0,0,0,0.07);
+    margin: 30px;
+    padding: 1px 10px 10px 10px;
+}
+
+
+div.input {
+    margin: 20px 0px;
+}
+
+input.keyword {
+    width: 70%;
+    margin-left: 10px;
+    /*display: inline-block;*/
+}
+
+.checkbox {
+    margin-left: 40px;
+    /*display: inline;*/
+}
+
+.checkbox input {
+    margin: 0%;
+    /*border:1px solid rgb(0,0,255);*/
+}
+
+.checkbox label {
+    margin: 0%;
+    /*border:1px solid rgb(0,0,255);*/
+    padding: 0%;
+    /*text-align: left;*/
+    /*color: red;*/
+}
+
+    {
+    margin-left: 25px;
+    width: 50%;
+}
+
+
+
+

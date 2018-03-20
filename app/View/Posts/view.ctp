@@ -1,77 +1,88 @@
-<div class="posts view">
-<h2><?php echo __('Post'); ?></h2>
-	<dl>
-		<dt><?php echo __('Id'); ?></dt>
-		<dd>
-			<?php echo h($post['Post']['id']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Title'); ?></dt>
-		<dd>
-			<?php echo h($post['Post']['title']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Body'); ?></dt>
-		<dd>
-			<?php echo h($post['Post']['body']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Images'); ?></dt>
-		<dd>
-			<?php
-				$baseUrl = $this->Html->url('/files/image/file_name/');
-				foreach ($post['Image'] as $image) {
-					echo $this->Html->image($baseUrl.$image['dir'].'/thumb_'.$image['file_name']);
-				}
-			?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Category'); ?></dt>
-		<dd>
-			<?php echo h($post['Category']['category_name']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Tags'); ?></dt>
-		<dd>
-			<?php
-			$length = count($post['Tag']);
-			$count = 0;
-			foreach ($post['Tag'] as $tag) {
-				echo h($tag['tag_name']);
-				if ($count !== $length-1) {
-					echo ", ";
-				}
-				$count++;
-			};
-			?>
-			&nbsp;
-		</dd>
+<?php echo $this->Html->script('jquery-1.12.4', array('inline' => false)); ?>
+<?php echo $this->Html->script('modal_window', array('inline' => false)); ?>
+<?php echo $this->Html->css('modal_window'); ?>
+<?php echo $this->Html->script('bootstrap'); ?>
 
-		<dt><?php echo __('Created'); ?></dt>
-		<dd>
-			<?php echo h($post['Post']['created']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Modified'); ?></dt>
-		<dd>
-			<?php echo h($post['Post']['modified']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('User'); ?></dt>
-		<dd>
-			<?php echo $this->Html->link($post['User']['id'], array('controller' => 'users', 'action' => 'view', $post['User']['id'])); ?>
-			&nbsp;
-		</dd>
-	</dl>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-8 posts view">
+        	<div>
+        		<h1><?php echo h($post['Post']['title']); ?><h1>
+        	</div>
+
+            <div>
+                <?php echo __('投稿日時'); ?>
+                <?php echo h($post['Post']['created']); ?>
+                <?php echo __('更新日時'); ?>
+                <?php echo h($post['Post']['modified']); ?>
+                &nbsp;
+
+                <?php echo __('by'); ?>
+                <?php echo $this->Html->link($post['User']['id'], array('controller' => 'users', 'action' => 'view', $post['User']['id'])); ?>
+                &nbsp;
+            </div>
+
+        	<div class="post_body">
+        		<?php echo h($post['Post']['body']); ?>
+                &nbsp;
+        	</div>
+        	<div>
+                <div class="Images_thumb">
+        			<?php
+        				$baseUrl = $this->Html->url('/files/image/file_name/');
+
+        				foreach ($post['Image'] as $image) {
+        					echo $this->Html->image($baseUrl.$image['dir'].'/thumb_'.$image['file_name'],
+                                                    array('data_target' => $image['dir'],
+                                                          'class' => 'modal_open'));
+        				}
+        			?>
+                </div>
+                &nbsp;
+        	</div>
+
+        	<dl>
+                <dt>
+                    <?php echo __('Category'); ?>
+                </dt>
+                <dd>
+                    <?php echo h($post['Category']['category_name']); ?>
+                    &nbsp;
+                </dd>
+                <dt>
+                    <?php echo __('Tags'); ?>
+                </dt>
+                <dd>
+                    <?php
+            			$length = count($post['Tag']);
+            			$count = 0;
+            			foreach ($post['Tag'] as $tag) {
+            				echo h($tag['tag_name']);
+            				if ($count !== $length-1) {
+            					echo ", ";
+            				}
+            				$count++;
+            			};
+            		?>
+                    &nbsp;
+                </dd>
+        	</dl>
+            <?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $post['Post']['id'])); ?>
+            <?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $post['Post']['id']),
+                                            array('confirm' => __('Are you sure you want to delete # %s?', $post['Post']['id']))); ?>
+
+        </div>
+        <div class="col-sm-4">
+            <?php echo $this->element('sidebar'); ?>
+        </div>
+    </div>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Edit Post'), array('action' => 'edit', $post['Post']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete Post'), array('action' => 'delete', $post['Post']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $post['Post']['id']))); ?> </li>
-		<li><?php echo $this->Html->link(__('List Posts'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Post'), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+<!-- オーバーレイ&モーダルウィンドウ -->
+<div id="overlay"></div>
+    <?php
+        echo $this->Html->div(
+            'modal_content',                                    //divのクラス名
+             '<a id="prev" class="slide_arrow" style="display: block;"></a>'.    //divのテキスト
+             '<a id="next" class="slide_arrow" style="display: block;"></a>'
+        );
+    ?>

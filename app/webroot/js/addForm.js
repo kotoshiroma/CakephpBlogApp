@@ -13,7 +13,7 @@ $(function(){
 
   $(document).on('click', '.btnDelForm', function(){
     // $(this).parent().remove();
-    $(this).closest(.copyForm).remove();
+    $(this).closest('.copyForm').remove();
     form_cnt--;
   })
 

@@ -31,3 +31,6 @@ Thumbs.db
 
 #画像ファイルは除く
 /app/webroot/files/image/file_name/
+
+#バックアップは除く
+/app/View/Layouts/default (2018:03:15).ctp
