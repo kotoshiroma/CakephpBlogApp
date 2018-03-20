@@ -8,19 +8,14 @@ App::uses('AppController', 'Controller');
  */
 class UsersController extends AppController {
 
-/**
- * Components
- *
- * @var array
- */
-	public $components = array('Paginator');
+	public $components = array('Paginator', 'RequestHandler');
 
 	public function beforeFilter() {
 	    parent::beforeFilter();
 	    $this->Auth->allow('index', 'view', 'logout');
 		// $this->Auth->allow('initDB');
 		// $this->initDB();
-		
+
 	}
 
 	// public function initDB() {
@@ -62,24 +57,14 @@ class UsersController extends AppController {
 	}
 
 
-/**
- * index method
- *
- * @return void
- */
+
 	public function index() {
 		$this->User->recursive = 0;
 		$this->Paginator->settings = array('conditions' => array('User.delete_flag' => 0));
 		$this->set('users', $this->Paginator->paginate());
 	}
 
-/**
- * view method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
+
 	public function view($id = null) {
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
@@ -102,13 +87,7 @@ class UsersController extends AppController {
 		$this->set(compact('groups'));
 	}
 
-/**
- * edit method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
+
 	public function edit($id = null) {
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
@@ -128,13 +107,7 @@ class UsersController extends AppController {
 		$this->set(compact('groups'));
 	}
 
-/**
- * delete method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
+
 	public function delete($id = null) {
 		$this->User->id = $id;
 		if (!$this->User->exists()) {
@@ -149,4 +122,19 @@ class UsersController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+
+    public function get_post_code() {
+        $this->autoRender = false;
+
+        if (!$this->request->is('ajax')) {
+            return;
+        }
+
+        $this->loadModel('PostCode');
+        $data = $this->PostCode->find('first', array('conditions' =>
+                                            array('post_code' => $this->request->data['post_code'])));
+
+        $this->RequestHandler->respondAs('application/json; charset=UTF-8');
+        return json_encode($data);
+    }
 }
