@@ -1,3 +1,7 @@
+<?php echo $this->Html->script('jquery-1.12.4', array('inline' => false)); ?>
+<?php echo $this->Html->script('bootstrap'); ?>
+
+<div class="container">
 <?php
 echo $this->Form->create('User', array('url' => 'login'));
 echo $this->Form->inputs(array(
@@ -5,5 +9,8 @@ echo $this->Form->inputs(array(
     'username',
     'password'
 ));
-echo $this->Form->end('Login');
+
+echo $this->Form->end(array('label' => 'Login', 'class' => 'btn btn-primary btn_sm'));
 ?>
+
+</div>

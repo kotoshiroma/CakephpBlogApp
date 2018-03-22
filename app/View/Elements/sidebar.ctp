@@ -20,15 +20,7 @@
         <?php echo $this->Form->end(array('class' => 'btn btn-primary btn_sm', 'label' => '検索')); ?>
     </div>
 
-<!--     <div class="actions">
-    	<h3><?php echo __('Actions'); ?></h3>
-    	<ul>
-    		<li><?php echo $this->Html->link(__('New Post'), array('action' => 'add')); ?></li>
-    		<li><?php echo $this->Html->link(__('New Category'), array('controller' => 'categories', 'action' => 'add')); ?></li>
-    		<li><?php echo $this->Html->link(__('New Tag'), array('controller' => 'tags', 'action' => 'add')); ?></li>
-    	</ul>
-    </div>
- -->    <div class="archives">
+    <div class="archives">
         <h3>Archives</h3>
         <ul>
             <li><a>2018年</a></li>

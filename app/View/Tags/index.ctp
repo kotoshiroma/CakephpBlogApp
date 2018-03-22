@@ -1,46 +1,37 @@
 <!-- ACL / Tag index-->
-<div class="tags index">
-	<h2><?php echo __('Tags'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
-	<thead>
-	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('tag_name'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
-	</tr>
-	</thead>
-	<tbody>
-	<?php foreach ($tags as $tag): ?>
-	<tr>
-		<td><?php echo h($tag['Tag']['id']); ?>&nbsp;</td>
-		<td><?php echo h($tag['Tag']['tag_name']); ?>&nbsp;</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $tag['Tag']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $tag['Tag']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $tag['Tag']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $tag['Tag']['id']))); ?>
-		</td>
-	</tr>
-<?php endforeach; ?>
-	</tbody>
-	</table>
-	<p>
-	<?php
-	echo $this->Paginator->counter(array(
-		'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-	));
-	?>	</p>
-	<div class="paging">
-	<?php
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
-	?>
+<?php echo $this->Html->script('jquery-1.12.4', array('inline' => false)); ?>
+<?php echo $this->Html->script('bootstrap'); ?>
+
+<div class="container tags index">
+	<h2 class="table_title">Tags</h2>
+	<?php echo $this->Html->link(__('Add Tag'), array('action' => 'add'), array('class' => 'btn btn-success btn_add')); ?>
+
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th><?php echo $this->Paginator->sort('id'); ?></th>
+					<th><?php echo $this->Paginator->sort('tag_name'); ?></th>
+					<th class="actions"><?php echo __('Actions'); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($tags as $tag): ?>
+				<tr>
+					<td><?php echo h($tag['Tag']['id']); ?>&nbsp;</td>
+					<td><?php echo $this->Html->link($tag['Tag']['tag_name'], array('action' => 'view', $tag['Tag']['id'])); ?></td>
+					<td class="actions">
+						<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $tag['Tag']['id'])
+															   , array('class' => 'btn btn-primary btn-xs')); ?>
+						<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $tag['Tag']['id'])
+																	 , array('class' => 'btn btn-primary btn-xs')
+																	 , array('confirm' => __('Are you sure you want to delete # %s?', $tag['Tag']['id']))); ?>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('List Posts'), array('controller' => 'posts', 'action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('New Tag'), array('action' => 'add')); ?></li>
-	</ul>
+
+	<?php echo $this->element('pagination') ?>
 </div>

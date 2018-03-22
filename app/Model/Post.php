@@ -4,13 +4,19 @@ App::uses('AppModel', 'Model');
 
 class Post extends AppModel {
 
-	public $name = 'Post';
+	public $validate = array(
+		'title' => array(
+			'rule' => 'notBlank',
+			'message' => '※入力必須項目です。'
+		),
+		'body' => array(
+			'rule' => 'notBlank',
+			'message' => '※入力必須項目です。'
+		)
+	);
+
+
 	public $actsAs = array('Search.Searchable');
-	// public $filterArgs = array (
-	// 	'category_id' => array ('type' => 'value'),
-	// 	// 'tag_id' => array ('type' => 'value') postsテーブルにはtag_idカラムは無い
-	// 	'Tag.tag_id' => array ('type' => 'value')
-	// );
 
 	public $filterArgs = array (
 		array('name' => 'keyword',

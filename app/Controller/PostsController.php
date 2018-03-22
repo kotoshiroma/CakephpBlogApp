@@ -49,8 +49,12 @@ class PostsController extends AppController {
 			$this->request->data['Tag'] = $this->request->data['Tag']['tag_id'];
 			$this->request->data['Post']['category_id'] = $this->request->data['Post']['category_id'][0];
 
-            if ($this->request->data['Image'][0]['file_name']['name'] === "") {
-				unset($this->request->data['Image']);
+			// 画像配列が空の場合、リクエストデータから取り除く
+			$count = count($this->request->data['Image']);
+			for ($i = 0; $i < $count; $i++) {
+				if ($this->request->data['Image'][$i]['file_name']['name'] === "") {
+					unset($this->request->data['Image'][$i]);
+				}
 			}
 
 			$this->Post->create();
@@ -91,7 +95,7 @@ class PostsController extends AppController {
 				}
 			}
 
-			// 更新処理
+			// 更新成功
 			if ($this->Post->saveAll($this->request->data)) {
 
 				// タグ選択無しの場合、中間テーブル(post_tags)のレコードを削除する
@@ -105,10 +109,22 @@ class PostsController extends AppController {
 				}
 
 				$this->Flash->success(__('The post has been saved.'));
-				// return $this->redirect(array('action' => 'index'));
 				$this->redirect($this->referer());
+			// 更新失敗
 			} else {
 				$this->Flash->error(__('The post could not be saved. Please, try again.'));
+
+				$this->set_categories_and_tags();
+
+				$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
+				$data = $this->Post->find('first', $options);
+				$this->set('post', $data);
+
+				$tagVal = array();
+				foreach ($data['Tag'] as $tag) {
+					$tagVal[] = intval($tag['id']);
+				}
+				$this->set('tagVal', $tagVal);
 			}
 		} else {
 			$this->set_categories_and_tags();
@@ -116,14 +132,14 @@ class PostsController extends AppController {
 			$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
 			$data = $this->Post->find('first', $options);
 			$this->request->data = $data;
+			$this->set('post', $data);
 
 			$tagVal = array();
 			foreach ($data['Tag'] as $tag) {
 				$tagVal[] = intval($tag['id']);
 			}
-
 			$this->set('tagVal', $tagVal);
-			$this->set('post', $data);
+			
 		}
 	}
 

@@ -6,7 +6,10 @@ App::uses('AppModel', 'Model');
  */
 class Category extends AppModel {
 
-    // public $hasMany = array('Post');
-
-
+	public $validate = array(
+		'category_name' => array(
+			'rule' => 'notBlank',
+			'message' => '※入力必須項目です。'
+		)
+	);
 }

@@ -1,19 +1,13 @@
-<div class="groups form">
-<?php echo $this->Form->create('Group'); ?>
-	<fieldset>
-		<legend><?php echo __('Add Group'); ?></legend>
-	<?php
-		echo $this->Form->input('name');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
+<?php echo $this->Html->script('jquery-1.12.4', array('inline' => false)); ?>
+<?php echo $this->Html->script('bootstrap'); ?>
 
-		<li><?php echo $this->Html->link(__('List Groups'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-	</ul>
+<div class="container groups form">
+	<?php echo $this->Form->create('Group', array('novalidate' => true)); ?>
+		<fieldset>
+			<legend><?php echo __('Add Group'); ?></legend>
+			<?php
+				echo $this->Form->input('name');
+			?>
+		</fieldset>
+	<?php echo $this->Form->end(array('label' => '送信', 'class' => 'btn btn-primary btn_sm')); ?>
 </div>

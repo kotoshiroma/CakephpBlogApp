@@ -5,11 +5,13 @@ App::uses('AppModel', 'Model');
  *
  */
 class Tag extends AppModel {
-    public $name = 'Tag';
-    // public $actsAs = array('Search.Searchable');
-    // public $filterArgs = array (
-    //     'tag_id' => array ('type' => 'value')
-    // );
+
+    public $validate = array(
+        'tag_name' => array(
+            'rule' => 'notBlank',
+            'message' => '※入力必須項目です。'
+        )
+    );
 
     public $hasandbelongstomany = array ('Post' => array (
                                         'classname' => 'Post',
@@ -20,15 +22,6 @@ class Tag extends AppModel {
                                         'unique' => true
                                      )
                                 );
-
-
-    // public $hasMany = array ('PostTag' => array (
-    //                                     'classname' => 'PostTag',
-    //                                     // 'jointable'  => 'posts_tags',
-    //                                     'foreignkey' => 'id',
-    //                                     // 'associationforeignkey'=> 'post_id'
-    //                                  )
-    //                             );
 
 
 }

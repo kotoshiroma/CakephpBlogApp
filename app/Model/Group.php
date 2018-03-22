@@ -7,31 +7,13 @@ App::uses('AppModel', 'Model');
  */
 class Group extends AppModel {
 
-/**
- * Validation rules
- *
- * @var array
- */
 	public $validate = array(
 		'name' => array(
-			'notBlank' => array(
-				'rule' => array('notBlank'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
+			'rule' => 'notBlank',
+			'message' => '※入力必須項目です。'
+		)
 	);
 
-	// The Associations below have been created with all possible keys, those that are not needed can be removed
-
-/**
- * hasMany associations
- *
- * @var array
- */
 	public $hasMany = array(
 		'User' => array(
 			'className' => 'User',

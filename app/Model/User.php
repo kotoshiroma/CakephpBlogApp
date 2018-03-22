@@ -10,31 +10,40 @@ App::uses('AuthComponent', 'Controller/Component');
  */
 class User extends AppModel {
 
-/**
- * Validation rules
- *
- * @var array
- */
 	public $validate = array(
-		'group_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+		'username' => array(
+			'rule' => 'notBlank',
+			'message' => '※入力必須項目です。'
+		),
+		'password' => array(
+			'rule' => 'notBlank',
+			'message' => '※入力必須項目です。'
+		),
+		'post_code' => array(
+			'rule1' => array(
+				'rule' => 'notBlank',
+				'message' => '※入力必須項目です。'
 			),
+			'rule2' => array(
+				'rule' => 'numeric',
+				'message' => '※数字を入力してください。'
+			),
+			'rule3' => array(
+				'rule' => array('between', 7, 7),
+				'message' => '※7桁の数字を入力してください。'
+			),
+
+		),
+		'address1' => array(
+			'rule' => 'notBlank',
+			'message' => '※入力必須項目です。'
+		),
+		'address2' => array(
+			'rule' => 'notBlank',
+			'message' => '※入力必須項目です。'
 		),
 	);
 
-	// The Associations below have been created with all possible keys, those that are not needed can be removed
-
-/**
- * belongsTo associations
- *
- * @var array
- */
  	public $actsAs = array('Acl' => array('type' => 'requester',
 										  'enabled' => false));
 
@@ -48,11 +57,7 @@ class User extends AppModel {
 		)
 	);
 
-/**
- * hasMany associations
- *
- * @var array
- */
+
 	public $hasMany = array(
 		'Post' => array(
 			'className' => 'Post',
@@ -94,5 +99,4 @@ class User extends AppModel {
 		$this->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
 		return true;
 	}
-
 }

@@ -2,13 +2,14 @@
 <?php echo $this->Html->script('bootstrap'); ?>
 
 <div class="container users view">
-	<!-- <h2><?php echo __('User'); ?></h2> -->
-	<h2 style="float: left;">User</h2>
+
+	<h2 class="table_title"><?php echo h($user['User']['username']); ?></h2>
+
 	<?php echo $this->Html->link('Delete', array('action' => 'delete', $user['User']['id']), 
-											array('class' => 'btn btn-primary btn_sm', 'style' => 'float: right;')); ?>
+											array('class' => 'btn btn-primary btn_sm  btn_delete')); ?>
 
 	<?php echo $this->Html->link('Edit', array('action' => 'edit', $user['User']['id']), 
-										  array('class' => 'btn btn-primary btn_sm', 'style' => 'float: right; margin-right: 5px;')); ?>
+										  array('class' => 'btn btn-primary btn_sm btn_edit', 'style' => 'margin-right: 5px;')); ?>
 
 	<div class="table-responsive" style="clear: both;">
 		<table class="table table-bordered table-striped table-hover">
@@ -19,13 +20,13 @@
 					&nbsp;
 				</td>
 			</tr>
-			<tr>
+<!-- 			<tr>
 				<th><?php echo __('Username'); ?></th>
 				<td>
 					<?php echo h($user['User']['username']); ?>
 					&nbsp;
 				</td>
-			</tr>
+			</tr> -->
 			<tr>
 				<th><?php echo __('Group'); ?></th>
 				<td>
