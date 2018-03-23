@@ -63,5 +63,7 @@ App::uses('Controller', 'Controller');
          );
 
          $this->set('auth', $this->Auth);
+         // $this->set('loginUser', $this->Auth->user());
+         $this->set('ADMIN_ID', "4");
      }
  }
