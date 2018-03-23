@@ -3,13 +3,14 @@
 <?php echo $this->Html->script('bootstrap'); ?>
 <?php echo $this->Html->script('addForm', array('inline' => false)); ?>
 
-<div class="container-fluid post_form posts form">
+<div class="container-fluid posts form">
 	<div class="row">
 		<div class="col-sm-8 col-sm-offset-2 posts form">
 		<?php echo $this->Form->create('Post', array('type' => 'file', 'novalidate' => true)); ?>
 			<fieldset>
 				<legend><?php echo __('Add Post'); ?></legend>
 				<?php
+					echo $this->Form->input('user_id', array('type' => 'hidden', 'value' => $auth->user('id')));
 					echo $this->Form->input('title');
 					echo $this->Form->input('body');
 				?>
@@ -25,9 +26,10 @@
 
 				<?php
 					echo $this->Form->input('category_id', array ('label' => 'Categories',
-																		'multiple' => 'select'));
+																  'multiple' => 'select',
+																  'empty' => '未選択'));
 					echo $this->Form->input('Tag.tag_id', array ('label' => 'Tags',
-																   'multiple' => 'checkbox'));
+																 'multiple' => 'checkbox'));
 				?>
 			</fieldset>
 		<?php echo $this->Form->end(array('label' => '送信', 'class' => 'btn btn-primary btn_sm')); ?>

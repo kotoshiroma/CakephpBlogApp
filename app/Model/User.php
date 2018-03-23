@@ -2,6 +2,9 @@
 App::uses('AppModel', 'Model');
 App::uses('AuthComponent', 'Controller/Component');
 
+App::import('Model', 'PostCode');
+// App::uses('Model', 'PostCode');
+
 /**
  * User Model
  *
@@ -11,13 +14,35 @@ App::uses('AuthComponent', 'Controller/Component');
 class User extends AppModel {
 
 	public $validate = array(
-		'username' => array(
-			'rule' => 'notBlank',
-			'message' => '※入力必須項目です。'
-		),
+        'username' => array(
+            'rule1' => array(
+                'rule' => 'notBlank',
+                'message' => '※入力必須項目です。'
+            ),
+            'rule2' => array(
+                'rule' => array('maxLength',50),
+                'message' => '※50文字以内で入力してください。'
+            )
+        ),
 		'password' => array(
-			'rule' => 'notBlank',
-			'message' => '※入力必須項目です。'
+			'rule1' => array(
+				'rule' => 'notBlank',
+				'message' => '※入力必須項目です。'
+			),
+			'rule2' => array(
+				'rule' => array('between', 6, 14),
+				'message' => '※6文字以上、14文字以内で入力してください。'
+			)
+		),
+		'password_conf' => array(
+			'rule1' => array(
+				'rule' => 'notBlank',
+				'message' => '※確認のためにパスワードをもう一度入力してください。'
+			),
+			'rule2' => array(
+				'rule' => 'checkPassword',
+				'message' => '※一度目に入力したパスワードと異なります。'
+			)
 		),
 		'post_code' => array(
 			'rule1' => array(
@@ -32,17 +57,53 @@ class User extends AppModel {
 				'rule' => array('between', 7, 7),
 				'message' => '※7桁の数字を入力してください。'
 			),
-
+			'rule4' => array(
+				'rule' => 'checkPostCode',
+				'message' => '※入力した郵便番号は存在しません。'
+			)
 		),
-		'address1' => array(
-			'rule' => 'notBlank',
-			'message' => '※入力必須項目です。'
-		),
-		'address2' => array(
-			'rule' => 'notBlank',
-			'message' => '※入力必須項目です。'
-		),
+        'address1' => array(
+            'rule1' => array(
+                'rule' => 'notBlank',
+                'message' => '※入力必須項目です。'
+            ),
+            'rule2' => array(
+                'rule' => array('maxLength',100),
+                'message' => '※100文字以内で入力してください。'
+            )
+        ),
+        'address2' => array(
+            'rule1' => array(
+                'rule' => 'notBlank',
+                'message' => '※入力必須項目です。'
+            ),
+            'rule2' => array(
+                'rule' => array('maxLength',100),
+                'message' => '※100文字以内で入力してください。'
+            )
+        ),
 	);
+
+	public function checkPassword($check) {
+
+		if ($this->data['User']['password'] === $this->data['User']['password_conf']) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function checkPostCode($check) {
+
+		$postCode = new PostCode();
+		$data_count = $postCode->find('count', array('conditions' => array('post_code' => $check['post_code'])));
+		if ($data_count >= 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 
  	public $actsAs = array('Acl' => array('type' => 'requester',
 										  'enabled' => false));

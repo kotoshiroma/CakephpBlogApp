@@ -5,14 +5,29 @@ App::uses('AppModel', 'Model');
 class Post extends AppModel {
 
 	public $validate = array(
+
 		'title' => array(
-			'rule' => 'notBlank',
-			'message' => '※入力必須項目です。'
-		),
-		'body' => array(
-			'rule' => 'notBlank',
-			'message' => '※入力必須項目です。'
-		)
+            'rule1' => array(
+                'rule' => 'notBlank',
+                'message' => '※入力必須項目です。'
+            ),
+            'rule2' => array(
+                'rule' => array('maxLength',50),
+                'message' => '※50文字以内で入力してください。'
+            )
+        ),
+        'body' => array(
+            'rule1' => array(
+                'rule' => 'notBlank',
+                'message' => '※入力必須項目です。'
+            )
+        ),
+        'category_id' => array(
+            'rule1' => array(
+                'rule' => 'notBlank',
+                'message' => '※入力必須項目です。'
+            )
+        )
 	);
 
 
@@ -34,6 +49,10 @@ class Post extends AppModel {
 			  'method' => 'findByTags',
 		  	  // 'field' => 'Tag.id')
 			  'field' => 'Post.id'
+		),
+		array('name' => 'created_year',
+			  'type' => 'like',
+			  'field' => 'Post.created'
 		)
 	);
 

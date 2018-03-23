@@ -13,7 +13,8 @@
                 <h3>Search</h3>
                 <?php echo $this->Form->input('keyword', array('class' => 'keyword')); ?>
                 <?php echo $this->Form->input('category_id', array ('label' => 'Categories',
-                                                                    'multiple' => 'select')); ?>
+                                                                    'multiple' => 'select',
+                                                                    'empty' => '未選択')); ?>
                 <?php echo $this->Form->input('tag_id', array ('label' => 'Tags',
                                                                'multiple' => 'checkbox')); ?>
             </fieldset>

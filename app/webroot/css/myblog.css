@@ -61,9 +61,19 @@ div.blog_name {
 div.posts,
 div.view,
 div.index {
-
+    padding: 0px;
+    /*background-color: rgb(255,0,0,0.3);*/
 }
 
+div.post {
+    clear: both;
+    margin-top: 70px;
+}
+
+.post_body {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
 
 input, textarea {
     padding: 1%;
@@ -100,7 +110,7 @@ div.table-responsive {
 }
 
 
-.post_form {
+.form {
     margin-bottom: 50px;
 }
 
@@ -121,7 +131,7 @@ div.table-responsive {
 
 .about {
     background-color: rgb(0,0,0,0.07);
-    margin: 30px;
+    margin: 0px 30px 30px 30px;
     padding: 1px 10px 10px 10px;
 }
 
@@ -149,8 +159,8 @@ div.input {
 }
 
 input.keyword {
-    width: 70%;
-    margin-left: 10px;
+    width: 90%;
+    margin-left: 0px;
     /*display: inline-block;*/
 }
 

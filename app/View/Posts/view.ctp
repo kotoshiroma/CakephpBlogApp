@@ -18,7 +18,7 @@
                 &nbsp;
 
                 <?php echo __('by'); ?>
-                <?php echo $this->Html->link($post['User']['id'], array('controller' => 'users', 'action' => 'view', $post['User']['id'])); ?>
+                <?php echo $this->Html->link($post['User']['username'], array('controller' => 'users', 'action' => 'view', $post['User']['id'])); ?>
                 &nbsp;
             </div>
 
@@ -67,9 +67,17 @@
                     &nbsp;
                 </dd>
         	</dl>
-            <?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $post['Post']['id'])); ?>
-            <?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $post['Post']['id']),
-                                            array('confirm' => __('Are you sure you want to delete # %s?', $post['Post']['id']))); ?>
+            <?php
+                if ($auth->user('id') !== null) {
+                    if ($auth->user('group_id') === $ADMIN_ID or $auth->user('id') === $post['Post']['user_id']) {
+                        echo $this->Html->link(__('Edit'), array('action' => 'edit', $post['Post']['id']),
+                                                                    array('class' => 'btn btn-primary btn-xs', 'style' => 'margin-right: 5px;'));
+                        echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $post['Post']['id']),
+                                                                    array('class' => 'btn btn-primary btn-xs'),
+                                                                    array('confirm' => __('Are you sure you want to delete # %s?', $post['Post']['id'])));
+                    }
+                }
+            ?>
 
         </div>
         <div class="col-sm-4">

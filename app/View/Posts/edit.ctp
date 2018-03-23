@@ -35,10 +35,11 @@
 
 				<?php
 					echo $this->Form->input('category_id', array ('label' => 'Categories',
-																	   'multiple' => 'select'));
+																  'multiple' => 'select',
+																  'empty' => '未選択'));
 					echo $this->Form->input('Tag.tag_id', array ('label' => 'Tags',
-														     'multiple' => 'checkbox',
-														     'selected' => $tagVal));
+														         'multiple' => 'checkbox',
+														     	 'selected' => $tagVal));
 				?>
 			</fieldset>
 		<?php echo $this->Form->end(array('label' => '送信', 'class' => 'btn btn-primary btn_sm')); ?>

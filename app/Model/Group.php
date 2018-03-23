@@ -8,11 +8,17 @@ App::uses('AppModel', 'Model');
 class Group extends AppModel {
 
 	public $validate = array(
-		'name' => array(
-			'rule' => 'notBlank',
-			'message' => '※入力必須項目です。'
-		)
-	);
+        'name' => array(
+            'rule1' => array(
+                'rule' => 'notBlank',
+                'message' => '※入力必須項目です。'
+            ),
+            'rule2' => array(
+                'rule' => array('maxLength',100),
+                'message' => '※100文字以内で入力してください。'
+            )
+        )
+    );
 
 	public $hasMany = array(
 		'User' => array(

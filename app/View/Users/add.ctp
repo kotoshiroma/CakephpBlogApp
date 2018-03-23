@@ -9,6 +9,7 @@
 			<?php
 				echo $this->Form->input('username');
 				echo $this->Form->input('password');
+				echo $this->Form->input('password_conf', array('label' => 'password（確認用）', 'type' => 'password'));
 
 		        echo $this->Form->input('post_code', array('label' => '郵便番号', 'class' => 'post_code', 'maxlength' => 7));
 		        echo $this->Form->input('address1', array('label' => '都道府県', 'class' => 'address1'));

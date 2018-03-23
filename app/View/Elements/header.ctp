@@ -9,15 +9,17 @@
             <ul class="nav navbar-nav">
                 <li><?php echo $this->Html->link('HOME', array('controller' => 'posts', 'action' => 'index')); ?></li>
                 
-                <li class="dropdown active">
-                    <a class="dropdown-toggle" data-toggle="dropdown" role="button">MENU <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><?php echo $this->Html->link('ユーザー', array('controller' => 'users', 'action' => 'index')); ?></li>
-                        <li><?php echo $this->Html->link('グループ', array('controller' => 'groups', 'action' => 'index')); ?></li>
-                        <li><?php echo $this->Html->link('カテゴリー', array('controller' => 'categories', 'action' => 'index')); ?></li>
-                        <li><?php echo $this->Html->link('タグ', array('controller' => 'tags', 'action' => 'index')); ?></li>
-                    </ul>
-                </li>
+                <?php if ($auth->user('group_id') === $ADMIN_ID) { ?>
+                        <li class="dropdown active">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button">MENU <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><?php echo $this->Html->link('ユーザー', array('controller' => 'users', 'action' => 'index')); ?></li>
+                                <li><?php echo $this->Html->link('グループ', array('controller' => 'groups', 'action' => 'index')); ?></li>
+                                <li><?php echo $this->Html->link('カテゴリー', array('controller' => 'categories', 'action' => 'index')); ?></li>
+                                <li><?php echo $this->Html->link('タグ', array('controller' => 'tags', 'action' => 'index')); ?></li>
+                            </ul>
+                        </li>
+                <?php } ?>
 
                 <li><?php echo $this->Html->link('ABOUT', array('controller' => 'posts', 'action' => 'index')); ?></li>
                 <li><?php echo $this->Html->link('CONTACT', array('controller' => 'posts', 'action' => 'index')); ?></li>
@@ -27,14 +29,11 @@
                     <div>
                         <h4>
                             <span>
-                                <?php echo $auth->user('username'); ?>
-                            
-                                <?php
-                                    
-
-                                    $user_id = $auth->user('id');
-                                    if (isset($user_id)) {
-                                        echo $this->Html->link('Logout', array('controller' => 'users', 'action' => 'logout'));
+                                <?php 
+                                    if ($auth->user('id') !== null) {
+                                        // echo $loginUser('username');
+                                        echo $auth->user('username');
+                                        echo $this->Html->link(' : Logout', array('controller' => 'users', 'action' => 'logout'));
 
                                     } else {
                                         echo $this->Html->link('Login', array('controller' => 'users', 'action' => 'login'));
