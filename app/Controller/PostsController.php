@@ -13,21 +13,39 @@ class PostsController extends AppController {
 		parent::beforeFilter();
 		$this->Auth->allow('index', 'view');
 
+		// $this->set_categories_and_tags();
+		// $this->set_archives();
 	}
 
-	public function index($category_id = null) {
+	public function index($created_year = null) {
 
 		$this->Post->recursive = 0;
 		$this->Prg->commonProcess(); // ここでgetとしてリダイレクトされる(データがクエリストリング形式になる)
 
-		// $this->paginate = array('conditions' => $this->Post->parseCriteria($this->passedArgs),
-		// 						'order' => array('Post.id' => 'desc'));
-	
-		$this->paginate = array('conditions' => array($this->Post->parseCriteria($this->passedArgs), 'Post.delete_flag' => 0),
-								'order' => array('Post.id' => 'desc'));
+		// debug($created_year);
+		// debug($this->Prg->parsedParams());
+		// debug($this->passedArgs);
+		// debug($this->Post->parseCriteria($this->passedArgs));
+		// exit;
+
+		if (is_null($created_year)) {
+
+			$this->paginate = array('conditions' => array($this->Post->parseCriteria($this->passedArgs)
+														  ,'Post.delete_flag' => 0), //モデルにget_condition()などを書く。（配列を返すメソッド）
+									'order' => array('Post.id' => 'desc'));
+
+		} else {
+			$this->Post->virtualFields['created_year'] = 'SUBSTRING(Post.created, 1, 4)';
+			$this->paginate = array('conditions' => array($this->Post->parseCriteria($this->passedArgs)
+														  ,'Post.delete_flag' => 0
+														  ,'Post.created_year' => $created_year),
+									'order' => array('Post.id' => 'desc'));
+		}
+
 
 	 	$this->set('posts', $this->paginate());
 		$this->set_categories_and_tags();
+		$this->set_archives();
 	}
 
 
@@ -38,6 +56,7 @@ class PostsController extends AppController {
 		$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
 		$this->set('post', $this->Post->find('first', $options));
 		$this->set_categories_and_tags();
+		$this->set_archives();
 	}
 
 
@@ -143,7 +162,7 @@ class PostsController extends AppController {
 		}
 	}
 
-	// 論理削除
+	// 削除処理（論理削除）
 	public function delete($id = null) {
 		$this->Post->id = $id;
 		if (!$this->Post->exists()) {
@@ -170,5 +189,21 @@ class PostsController extends AppController {
 		$this->set('tags', $this->Tag->find('list',
 											array ('fields' => array('Tag.id', 'Tag.tag_name'))));
 
+	}
+
+	// モデルにこれを書く
+	private function set_archives() {
+
+		$this->Post->virtualFields['created_year'] = 'SUBSTRING(Post.created, 1, 4)';
+		$this->Post->virtualFields['cnt_of_post'] = 'COUNT(*)';
+		$this->Post->recursive = -1;
+		$data = $this->Post->find('all',array(
+												'fields' => array('created_year', 'cnt_of_post')
+											   ,'conditions' => array('delete_flag' => 0)
+											   ,'group' => 'created_year'
+											   ,'order' => 'created_year DESC'
+									  ));
+
+		$this->set('created_years', $data);
 	}
 }

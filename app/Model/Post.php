@@ -50,10 +50,6 @@ class Post extends AppModel {
 		  	  // 'field' => 'Tag.id')
 			  'field' => 'Post.id'
 		),
-		array('name' => 'created_year',
-			  'type' => 'like',
-			  'field' => 'Post.created'
-		)
 	);
 
 	public function findByTags($data = array()) {

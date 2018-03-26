@@ -5,12 +5,7 @@ App::uses('AuthComponent', 'Controller/Component');
 App::import('Model', 'PostCode');
 // App::uses('Model', 'PostCode');
 
-/**
- * User Model
- *
- * @property Group $Group
- * @property Post $Post
- */
+
 class User extends AppModel {
 
 	public $validate = array(
