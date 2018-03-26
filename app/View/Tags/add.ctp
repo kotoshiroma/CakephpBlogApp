@@ -11,5 +11,5 @@
 				// echo $this->Form->error('tag.tag_name');
 			?>
 		</fieldset>
-	<?php echo $this->Form->end(array('label' => '送信', 'class' => 'btn btn-primary btn_sm')); ?>
+	<?php echo $this->Form->end(array('label' => __('Submit'), 'class' => 'btn btn-primary btn_sm')); ?>
 </div>

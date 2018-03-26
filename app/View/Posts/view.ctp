@@ -11,9 +11,9 @@
         	</div>
 
             <div>
-                <?php echo __('投稿日時'); ?>
+                <?php echo __('Created'); ?>
                 <?php echo h($post['Post']['created']); ?>
-                <?php echo __('更新日時'); ?>
+                <?php echo __('Modified'); ?>
                 <?php echo h($post['Post']['modified']); ?>
                 &nbsp;
 
@@ -43,7 +43,7 @@
 
         	<dl>
                 <dt>
-                    <?php echo __('Category'); ?>
+                    <?php echo __('Categories'); ?>
                 </dt>
                 <dd>
                     <?php echo h($post['Category']['category_name']); ?>

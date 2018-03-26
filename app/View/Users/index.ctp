@@ -3,7 +3,7 @@
 
 <div class="container users index">
 
-	<h2 class="table_title">Users</h2>
+	<h2 class="table_title"><?php echo __('Users'); ?></h2>
 	<?php echo $this->Html->link(__('Add User'), array('action' => 'add'), array('class' => 'btn btn-success btn_add')); ?>
 
 	<div class="table-responsive" style="clear: both;">
@@ -11,10 +11,10 @@
 			<thead>
 				<tr>
 					<th><?php echo $this->Paginator->sort('id'); ?></th>
-					<th><?php echo $this->Paginator->sort('username'); ?></th>
-					<th><?php echo $this->Paginator->sort('group_id'); ?></th>
-					<th><?php echo $this->Paginator->sort('created'); ?></th>
-					<th><?php echo $this->Paginator->sort('modified'); ?></th>
+					<th><?php echo $this->Paginator->sort( __('username')); ?></th>
+					<th><?php echo $this->Paginator->sort(__('group_id')); ?></th>
+					<th><?php echo $this->Paginator->sort(__('created')); ?></th>
+					<th><?php echo $this->Paginator->sort(__('modified')); ?></th>
 					<th class="actions"><?php echo __('Actions'); ?></th>
 				</tr>
 			</thead>

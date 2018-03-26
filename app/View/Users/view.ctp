@@ -5,10 +5,10 @@
 
 	<h2 class="table_title"><?php echo h($user['User']['username']); ?></h2>
 
-	<?php echo $this->Html->link('Delete', array('action' => 'delete', $user['User']['id']), 
+	<?php echo $this->Html->link( __('Delete'), array('action' => 'delete', $user['User']['id']), 
 											array('class' => 'btn btn-primary btn_sm  btn_delete')); ?>
 
-	<?php echo $this->Html->link('Edit', array('action' => 'edit', $user['User']['id']), 
+	<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $user['User']['id']), 
 										  array('class' => 'btn btn-primary btn_sm btn_edit', 'style' => 'margin-right: 5px;')); ?>
 
 	<div class="table-responsive" style="clear: both;">

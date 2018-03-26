@@ -10,7 +10,7 @@ echo $this->Form->inputs(array(
     'password'
 ));
 
-echo $this->Form->end(array('label' => 'Login', 'class' => 'btn btn-primary btn_sm'));
+echo $this->Form->end(array('label' => __('Login'), 'class' => 'btn btn-primary btn_sm'));
 ?>
 
 </div>

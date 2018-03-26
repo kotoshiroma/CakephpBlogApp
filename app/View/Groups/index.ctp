@@ -3,7 +3,7 @@
 
 <div class="container groups index">
 	
-	<h2 class="table_title">Groups</h2>
+	<h2 class="table_title"><?php echo __('Groups') ?></h2>
 	<?php echo $this->Html->link(__('Add Group'), array('action' => 'add'), array('class' => 'btn btn-success btn_add')); ?>
 
 	<div class="table-responsive">

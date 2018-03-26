@@ -7,16 +7,8 @@
 		<fieldset>
 			<legend><?php echo __('Add User'); ?></legend>
 			<?php
-				echo $this->Form->input('username');
-				echo $this->Form->input('password');
-				echo $this->Form->input('password_conf', array('label' => 'password（確認用）', 'type' => 'password'));
-
-		        echo $this->Form->input('post_code', array('label' => '郵便番号', 'class' => 'post_code', 'maxlength' => 7));
-		        echo $this->Form->input('address1', array('label' => '都道府県', 'class' => 'address1'));
-		        echo $this->Form->input('address2', array('label' => '市町区村', 'class' => 'address2'));
-
-		        echo $this->Form->input('group_id');
+		        echo $this->element('form_user');
 	    	?>
 		</fieldset>
-	<?php echo $this->Form->end(array('label' => '送信', 'class' => 'btn btn-primary btn_sm')); ?>
+	<?php echo $this->Form->end(array('label' => __('Submit'), 'class' => 'btn btn-primary btn_sm')); ?>
 </div>

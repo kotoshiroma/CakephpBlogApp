@@ -3,7 +3,7 @@
 <?php echo $this->Html->script('bootstrap'); ?>
 
 <div class="container tags index">
-	<h2 class="table_title">Tags</h2>
+	<h2 class="table_title"><?php echo __('Tags'); ?></h2>
 	<?php echo $this->Html->link(__('Add Tag'), array('action' => 'add'), array('class' => 'btn btn-success btn_add')); ?>
 
 	<div class="table-responsive">

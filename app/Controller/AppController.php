@@ -46,6 +46,8 @@ App::uses('Controller', 'Controller');
 
      public function beforeFilter() {
 
+        Configure::write('Config.language', 'jpn');
+
          $this->Auth->allow('display');
 
          // AuthComponent の設定

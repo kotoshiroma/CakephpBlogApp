@@ -11,8 +11,9 @@
 				<legend><?php echo __('Add Post'); ?></legend>
 				<?php
 					echo $this->Form->input('user_id', array('type' => 'hidden', 'value' => $auth->user('id')));
-					echo $this->Form->input('title');
-					echo $this->Form->input('body');
+					
+					echo $this->Form->input('title', array('label' => __('title')));
+					echo $this->Form->input('body', array('label' => __('body')));
 				?>
 				<button id="btnAddForm" type="button">画像追加</button>
 
@@ -25,14 +26,14 @@
 				</div>
 
 				<?php
-					echo $this->Form->input('category_id', array ('label' => 'Categories',
+					echo $this->Form->input('category_id', array ('label' => __('Categories'),
 																  'multiple' => 'select',
 																  'empty' => '未選択'));
-					echo $this->Form->input('Tag.tag_id', array ('label' => 'Tags',
+					echo $this->Form->input('Tag.tag_id', array ('label' => __('Tags'),
 																 'multiple' => 'checkbox'));
 				?>
 			</fieldset>
-		<?php echo $this->Form->end(array('label' => '送信', 'class' => 'btn btn-primary btn_sm')); ?>
+		<?php echo $this->Form->end(array('label' => __('Submit'), 'class' => 'btn btn-primary btn_sm')); ?>
 		</div>
 	</div>
 </div>
