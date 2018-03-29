@@ -1,18 +1,11 @@
-// $(document).ready(function(){
-//
-// })
-
-//上記の省略形が下記
-
 $(function(){
   var form_cnt = 0; //画像フォームの数を保持する
 
-  $('#btnAddForm').click(function(){
+  $('.btn_addForm').click(function(){
     addForm();
   })
 
-  $(document).on('click', '.btnDelForm', function(){
-    // $(this).parent().remove();
+  $(document).on('click', '.btn_del_imgForm', function(){
     $(this).closest('.copyForm').remove();
     form_cnt--;
   })
@@ -20,7 +13,8 @@ $(function(){
   function addForm() {
     form_cnt++;
 
-    var lastForm = $('#imageForms').find(':last').prev();
+    // var lastForm = $('#imageForms').find(':last').prev();
+    var lastForm = $('.input_file:last').find('input');
     var name = lastForm.attr('name');
     var id = lastForm.attr('id');
 
@@ -32,11 +26,11 @@ $(function(){
 
     var newForm = $('.dummyForm').clone();
     newForm.attr('style', 'display:inline;');
-    newForm.attr('class', 'copyForm');
-    // newForm.children('input').attr('name', newName);
-    // newForm.children('input').attr('id', newId);
+    newForm.attr('class', 'copyForm input_file');
     newForm.find('input').attr('name', newName);
     newForm.find('input').attr('id', newId);
+
+    newForm.find('label').attr('for', newId);
 
     $('#imageForms').append(newForm);
   }
@@ -44,9 +38,7 @@ $(function(){
   $(document).on('change', 'input[type="file"]', function() {
     // ファイル選択状態の場合
     if ($(this)[0].files[0]) {
-      $(this).attr('style', 'display:none;');
-      // $(this).prev().text($(this)[0].files[0].name);
-      // $(this).prev().attr('style', 'display:block;');
+      $(this).closest('.copyForm').find('.label_for_inputFile').attr('style', 'display:none;');
       $(this).closest('.copyForm').find('.labelFileName').text($(this)[0].files[0].name);
       $(this).closest('.copyForm').find('.labelFileName').attr('style', 'display:block;');
     }

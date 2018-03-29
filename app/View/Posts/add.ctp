@@ -15,15 +15,8 @@
 					echo $this->Form->input('title', array('label' => __('title')));
 					echo $this->Form->input('body', array('label' => __('body')));
 				?>
-				<button id="btnAddForm" type="button">画像追加</button>
 
-				<div id="imageForms">
-					<div class="dummyForm input_file" style="display:none;">
-						<p class="labelFileName" style="display:none;"></p>
-						<input type="file" name="data[Image][0][file_name]" id="Image0FileName">
-						<button class="btnDelForm" type="button">画像キャンセル</button>
-					</div>
-				</div>
+				<?php echo $this->element('form_add_img'); ?>
 
 				<?php
 					echo $this->Form->input('category_id', array ('label' => __('Categories'),
