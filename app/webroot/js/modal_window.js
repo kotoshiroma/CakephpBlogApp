@@ -3,8 +3,23 @@ $(document).ready(function(){
     // 選択中の画像の添字を保持
     var _current_idx;
 
-    // モーダルウィンドウをセンタリング
-    locateCenter();
+    var timer = null;
+    var cnt = 0;
+
+    function checkSize() {
+
+        if ($('.modal_content').outerWidth() > 0 && $('.modal_content').outerHeight() > 0) {
+
+            locateCenter();
+            clearInterval(timer);
+
+        } else {
+            if (cnt >= 100 && timer != null) {
+                clearInterval(timer);
+            }
+        }
+        cnt++;
+    }
 
     function locateCenter() {
 
@@ -12,12 +27,11 @@ $(document).ready(function(){
         var h = $(window).height();
 
         var cw = $('.modal_content').outerWidth();
-        var ch = $('.modal_content').outerHeight();
+        var ch = $('.modal_content').outerHeight();        
 
         // ウィンドウの横幅 - モーダルウィンドウの横幅 /2 が、端からの余白の長さ
         $('.modal_content').css({'left': ((w - cw)/2) + 'px'});
-        $('.modal_content').css({'top': ((h - ch)/2) + 'px'});
-
+        $('.modal_content').css({'top': ((h - ch)/2) + 'px'});        
     }
 
     // サムネイル画像クリックイベント
@@ -26,59 +40,69 @@ $(document).ready(function(){
         // クリックされたサムネイル画像が、何番目かを取得し、設定する
         _current_idx = $('.modal_open').index(this);
 
-        // サムネイル画像のパスをもとに通常サイズのファイスパスを取得
         var img_pass = $(this).attr('src').replace('thumb_', '');
-        var img = $('<img src="' + img_pass + '" class="modal_image"/>');
+        var img = $('<img src="' + img_pass + '" class="modal_image" />');
         img.appendTo('.modal_content');
 
+        timer = setInterval(checkSize, 1);
+
         $('#overlay, .modal_content').fadeIn('slow');
-        // locateCenter();
     });
 
     // スライド切り替え矢印ボタンクリックイベント
     $(document).on('click', '.slide_arrow', function() {
 
-        $('.modal_content').children('img').remove();
+        $('.modal_content').fadeOut('slow', function(){
 
-        var img_count = $('.Images_thumb > img').length;
-        var imgs = $('.Images_thumb > img');
+            $('.modal_content').children('img').remove();
 
-        // 先頭の要素の場合
-        if (_current_idx == 0) {
-            if ($(this).attr('id') == "prev") {
-                _current_idx = img_count - 1;
+            var img_count = $('.Images_thumb > img').length;
+            var imgs = $('.Images_thumb > img');
+
+            // 先頭の要素の場合
+            if (_current_idx == 0) {
+                if ($(this).attr('id') == "prev") {
+                    _current_idx = img_count - 1;
+                } else {
+                    _current_idx++;
+                }
+
+            // 末尾の要素の場合
+            } else if (_current_idx == img_count - 1) {
+                if ($(this).attr('id') == "prev") {
+                    _current_idx--;
+                } else {
+                    _current_idx = 0;
+                }
+            // それ以外の要素の場合
             } else {
-                _current_idx++;
+                if ($(this).attr('id') == "prev") {
+                    _current_idx--;
+                } else {
+                    _current_idx++;
+                }
             }
 
-        // 末尾の要素の場合
-        } else if (_current_idx == img_count - 1) {
-            if ($(this).attr('id') == "prev") {
-                _current_idx--;
-            } else {
-                _current_idx = 0;
-            }
-        // それ以外の要素の場合
-        } else {
-            if ($(this).attr('id') == "prev") {
-                _current_idx--;
-            } else {
-                _current_idx++;
-            }
-        }
+            var img_pass = imgs.eq(_current_idx).attr('src').replace('thumb_', '');
+            var img = $('<img src="' + img_pass + '" class="modal_image" />');
+            // img.attr('style', 'display:none;');
+            
+            img.appendTo('.modal_content');
 
-        var img_pass = imgs.eq(_current_idx).attr('src').replace('thumb_', '');
-        var img = $('<img src="' + img_pass + '" class="modal_image" />');
-
-        img.appendTo('.modal_content');
-        locateCenter();
+            timer = setInterval(checkSize, 1);
+            $('.modal_content').fadeIn('slow');
+            
+        }.bind(this));
     });
 
     // オーバーレイクリックイベント
     $(document).on('click', '#overlay', function() {
 
-        $('.modal_content').children('img').remove();
-        $('#overlay, .modal_content').fadeOut('slow');
+        $.when(
+            $('#overlay, .modal_content').fadeOut('slow')
+        ).done(function(){
+            $('.modal_content').children('img').remove();
+        });
     });
 
 
