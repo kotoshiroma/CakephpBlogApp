@@ -21,13 +21,6 @@
 					&nbsp;
 				</td>
 			</tr>
-<!-- 			<tr>
-				<th><?php echo __('Name'); ?></th>
-				<td>
-					<?php echo h($group['Group']['name']); ?>
-					&nbsp;
-				</td>
-			</tr> -->
 			<tr>
 				<th><?php echo __('Created'); ?></th>
 				<td>

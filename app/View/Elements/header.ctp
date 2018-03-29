@@ -3,14 +3,14 @@
 
 <div class="header">
 
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar">
         <div class="container-fluid">
             <ul class="nav navbar-nav">
-                <li><?php echo $this->Html->link(__('HOME'), array('controller' => 'posts', 'action' => 'index')); ?></li>
+                <li><?php echo $this->Html->link(__('HOME'), array('controller' => 'posts', 'action' => 'index'), array('class' => 'nav_li')); ?></li>
                 
                 <?php if ($auth->user('group_id') === $ADMIN_ID) { ?>
                         <li class="dropdown active">
-                            <a class="dropdown-toggle" data-toggle="dropdown" role="button"><?php echo __('MENU'); ?><span class="caret"></span></a>
+                            <a class="dropdown-toggle nav_li" data-toggle="dropdown" role="button"><?php echo __('MENU'); ?><span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><?php echo $this->Html->link(__('User'), array('controller' => 'users', 'action' => 'index')); ?></li>
                                 <li><?php echo $this->Html->link(__('Group'), array('controller' => 'groups', 'action' => 'index')); ?></li>
@@ -20,34 +20,44 @@
                         </li>
                 <?php } ?>
 
-                <li><?php echo $this->Html->link(__('ABOUT'), array('controller' => 'posts', 'action' => 'index')); ?></li>
-                <li><?php echo $this->Html->link(__('CONTACT'), array('controller' => 'posts', 'action' => 'index')); ?></li>
+                <li><?php echo $this->Html->link(__('ABOUT'), array('controller' => 'posts', 'action' => 'index'), array('class' => 'nav_li')); ?></li>
+                <li><?php echo $this->Html->link(__('CONTACT'), array('controller' => 'posts', 'action' => 'index'), array('class' => 'nav_li')); ?></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                 <li>
-                    <div>
-                        <h4>
-                            <span>
-                                <?php 
-                                    if ($auth->user('id') !== null) {
-                                        // echo $loginUser('username');
-                                        echo $auth->user('username');
-                                        echo $this->Html->link(' : '.__('Logout'), array('controller' => 'users', 'action' => 'logout'));
+                  
+                <?php if ($auth->user('id') !== null) { ?>
+                        <li class="nav_li nav_username">
+                            <?php echo $auth->user('username'); ?>
+                        </li>
+                        <li>
+                        <?php
+                            echo $this->Html->link(__('Logout'), array('controller' => 'users', 'action' => 'logout')
+                                                               , array('class' => 'btn btn_login nav_li')
+                                                  );
+                        ?>
+                        </li>
 
-                                    } else {
-                                        echo $this->Html->link(__('Login'), array('controller' => 'users', 'action' => 'login'));
-                                    }
-                                ?>
-                            </span>
-                        </h4>
-                    </div>
-                </li>
+                <?php } else { ?>
+                        <li>
+                        <?php
+                            echo $this->Html->link(__('Login'), array('controller' => 'users', 'action' => 'login')
+                                                              , array('class' => 'btn btn_logout nav_li')
+                                                  );
+                        ?>
+                        </li>
+                        <li>
+                        <?php
+                            echo $this->Html->link(__('sign up'), array('controller' => 'users', 'action' => 'add')
+                                                              , array('class' => 'btn btn_addUser nav_li')
+                                                  );
+                        ?>
+                        </li>
+                <?php } ?>
             </ul>
         </div>
     </nav>
 
     <div class="container-fluid blog_name ">
-        <!-- <h1>The BootStrap Blog</h1> -->
         <h1><?php echo $this->Html->link(__('The BootStrap Blog'), array('controller' => 'posts', 'action' => 'index')); ?></h1>
     </div>
 </div>

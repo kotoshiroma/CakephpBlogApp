@@ -11,10 +11,13 @@
 			?>
 			<?php foreach ($posts as $post): ?>
 				<div class="post">
-			        <h2><?php echo $this->Html->link(h($post['Post']['title']), array('action' => 'view', $post['Post']['id'])); ?></h2>
-					<p><?php echo h($post['Post']['created']); ?>&nbsp;by <?php echo h($post['User']['username']) ?></p>
-			        <div class="post_body"><?php echo h($post['Post']['body']); ?>&nbsp;</div>
+			        <h3 class="post_title">
+			        	<strong><?php echo $this->Html->link(h($post['Post']['title']), array('action' => 'view', $post['Post']['id'])); ?></strong>
+			        </h3>
+					<!-- <p class="post_date"><?php echo date('Y年n月j日',strtotime($post['Post']['created'])); ?>&nbsp;by <?php echo h($post['User']['username']) ?></p> -->
+					<p class="post_date"><?php echo h($post['Post']['created_fmt']); ?>&nbsp;by <?php echo h($post['User']['username']) ?></p>
 
+			        <div class="post_body"><?php echo h($post['Post']['body']); ?>&nbsp;</div>
 			        <?php
 			        	if ($auth->user('id') !== null) {
 			        		if ($auth->user('group_id') === $ADMIN_ID or $auth->user('id') === $post['Post']['user_id']) {
@@ -26,22 +29,10 @@
 			        		}
 			        	}
 			        ?>
-
 		    	</div>
 			<?php endforeach; ?>
 
-		 	<div class="paging text-center">
-		 		 <ul class="pagination">
-					<li><?php echo $this->Paginator->prev('<  ', array(), null, array('class' => 'prev disabled')); ?></li>
-					<li>
-						<?php echo $this->Paginator->numbers(array('separator' => '  ',
-															 'first' => 1,
-															 'last'=> 1)); 
-						?>
-					</li>
-					<li><?php echo $this->Paginator->next('  >', array(), null, array('class' => 'next disabled')); ?></li>				
-				</ul>
-			</div>
+			<?php echo $this->element('pagination'); ?>
 		</div>
 
 		<div class="col-sm-4">

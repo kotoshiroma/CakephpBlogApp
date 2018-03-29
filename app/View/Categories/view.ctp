@@ -20,13 +20,6 @@
 					&nbsp;
 				</td>
 			</tr>
-<!-- 			<tr>
-				<th><?php echo __('Category Name'); ?></th>
-				<td>
-					<?php echo h($category['Category']['category_name']); ?>
-					&nbsp;
-				</td>
-			</tr> -->
 			<tr>
 				<th><?php echo __('Created'); ?></th>
 				<td>

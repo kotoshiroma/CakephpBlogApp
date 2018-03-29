@@ -8,7 +8,6 @@
 			<legend><?php echo __('Add Tag'); ?></legend>
 			<?php
 				echo $this->Form->input('tag_name');
-				// echo $this->Form->error('tag.tag_name');
 			?>
 		</fieldset>
 	<?php echo $this->Form->end(array('label' => __('Submit'), 'class' => 'btn btn-primary btn_sm')); ?>

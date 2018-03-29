@@ -20,13 +20,6 @@
 					&nbsp;
 				</td>
 			</tr>
-<!-- 			<tr>
-				<th><?php echo __('Tag Name'); ?></th>
-				<td>
-					<?php echo h($tag['Tag']['tag_name']); ?>
-					&nbsp;
-				</td>
-			</tr> -->
 		</table>
 	</div>
 </div>

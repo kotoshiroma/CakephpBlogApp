@@ -1,42 +1,21 @@
 <?php
 App::uses('AppController', 'Controller');
-/**
- * Groups Controller
- *
- * @property Group $Group
- * @property PaginatorComponent $Paginator
- */
+
 class GroupsController extends AppController {
 
-/**
- * Components
- *
- * @var array
- */
 	public $components = array('Paginator');
 
 	public function beforeFilter() {
 	    parent::beforeFilter();
-	    // $this->Auth->allow();
 	}
 
-/**
- * index method
- *
- * @return void
- */
+
 	public function index() {
 		$this->Group->recursive = 0;
 		$this->set('groups', $this->Paginator->paginate());
 	}
 
-/**
- * view method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
+
 	public function view($id = null) {
 		if (!$this->Group->exists($id)) {
 			throw new NotFoundException(__('Invalid group'));
@@ -45,11 +24,7 @@ class GroupsController extends AppController {
 		$this->set('group', $this->Group->find('first', $options));
 	}
 
-/**
- * add method
- *
- * @return void
- */
+
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Group->create();
@@ -62,13 +37,7 @@ class GroupsController extends AppController {
 		}
 	}
 
-/**
- * edit method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
+
 	public function edit($id = null) {
 		if (!$this->Group->exists($id)) {
 			throw new NotFoundException(__('Invalid group'));
@@ -86,13 +55,7 @@ class GroupsController extends AppController {
 		}
 	}
 
-/**
- * delete method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
+
 	public function delete($id = null) {
 		$this->Group->id = $id;
 		if (!$this->Group->exists()) {

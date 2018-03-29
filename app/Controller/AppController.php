@@ -32,6 +32,7 @@ App::uses('Controller', 'Controller');
  */
 
  class AppController extends Controller {
+    
      public $helpers = array('Html', 'Form', 'Session');
      public $components = array(
          'Session',
@@ -46,7 +47,7 @@ App::uses('Controller', 'Controller');
 
      public function beforeFilter() {
 
-        Configure::write('Config.language', 'jpn');
+         Configure::write('Config.language', 'jpn');
 
          $this->Auth->allow('display');
 
@@ -64,8 +65,11 @@ App::uses('Controller', 'Controller');
            'action' => 'index'
          );
 
+         define("ADMIN_ID", "4");
+         define("PAGINATE_LIMIT", 5);
+
          $this->set('auth', $this->Auth);
-         // $this->set('loginUser', $this->Auth->user());
-         $this->set('ADMIN_ID', "4");
+         $this->set('ADMIN_ID', ADMIN_ID);
+         $this->set('PAGINATE_LIMIT', PAGINATE_LIMIT);
      }
  }

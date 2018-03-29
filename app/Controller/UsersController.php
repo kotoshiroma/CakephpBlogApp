@@ -12,47 +12,22 @@ class UsersController extends AppController {
 
 	public function beforeFilter() {
 	    parent::beforeFilter();
-	    $this->Auth->allow('logout');
-		// $this->Auth->allow('initDB');
-		// $this->initDB();
-
+	    $this->Auth->allow('logout', 'add', 'get_post_code');
 	}
 
-	// public function initDB() {
-	// 	$group = $this->User->Group;
-	// 	// Admin(idは4)には全て許可
-	// 	$group->id = 4;
-	// 	$this->Acl->allow($group, 'controllers');
-	//
-	// 	// manager(idは5)にはpostとwidgetsに対するアクセスを許可
-	// 	$group->id = 5;
-	// 	$this->Acl->deny($group, 'controllers');
-	// 	$this->Acl->allow($group, 'controllers/Posts');
-	// 	$this->Acl->allow($group, 'controllers/Widgets');
-	//
-	// 	// user(idは6)にはpostとwidgetsに対する追加と編集を許可
-	// 	$group->id = 6;
-	// 	$this->Acl->deny($group, 'controllers');
-	// 	$this->Acl->allow($group, 'controllers/Posts/add');
-	// 	$this->Acl->allow($group, 'controllers/Posts/edit');
-	// 	$this->Acl->allow($group, 'controllers/Widgets/add');
-	// 	$this->Acl->allow($group, 'controllers/Widgets/edit');
-	//
-	// 	echo "all done";
-	// 	exit;
-	// }
 
 	public function login() {
 	    if ($this->request->is('post')) {
 	        if ($this->Auth->login()) {
-	            return $this->redirect($this->Auth->redirect());
+	            return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
+	        } else {
+	        	$this->Session->setFlash(__('Your username or password was incorrect.'), 'default', array('class' => 'flash_msg'));
 	        }
-	        $this->Session->setFlash(__('Your username or password was incorrect.'));
 	    }
 	}
 
 	public function logout() {
-		$this->Session->setFlash('Good-Bye');
+		$this->Session->setFlash(__('Good-Bye'), 'default', array('class' => 'flash_msg'));
 		$this->redirect($this->Auth->logout());
 	}
 
@@ -78,7 +53,7 @@ class UsersController extends AppController {
 			$this->User->create();
 			if ($this->User->save($this->request->data)) {
 				$this->Flash->success(__('The user has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
 			} else {
 				$this->Flash->error(__('The user could not be saved. Please, try again.'));
 			}

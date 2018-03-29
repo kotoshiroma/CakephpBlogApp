@@ -3,7 +3,6 @@ App::uses('AppModel', 'Model');
 App::uses('AuthComponent', 'Controller/Component');
 
 App::import('Model', 'PostCode');
-// App::uses('Model', 'PostCode');
 
 
 class User extends AppModel {

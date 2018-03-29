@@ -2,10 +2,9 @@ $(document).ready(function(){
 
     $('.post_code').keyup(function() {
 
-        // if ($('.post_code').val().length < 7) {
-        //     return;
-        // }
-        // alert('7文字: ' + $('.post_code').val());
+        if ($('.post_code').val().length < 7) {
+            return;
+        }
 
         $.ajax({
             url:'/users/get_post_code',
@@ -16,8 +15,6 @@ $(document).ready(function(){
             }
         })
         .done(function(data){
-            // console.log('done');
-            // console.log(data);
 
             $('.address1').val(data.PostCode.address1);
             $('.address2').val(data.PostCode.address2 + data.PostCode.address3);

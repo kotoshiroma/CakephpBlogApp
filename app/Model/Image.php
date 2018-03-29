@@ -1,5 +1,5 @@
 <?php
-// ACL
+
 App::uses('AppModel', 'Model');
 
 class Image extends AppModel {

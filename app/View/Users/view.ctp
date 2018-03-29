@@ -20,13 +20,6 @@
 					&nbsp;
 				</td>
 			</tr>
-<!-- 			<tr>
-				<th><?php echo __('Username'); ?></th>
-				<td>
-					<?php echo h($user['User']['username']); ?>
-					&nbsp;
-				</td>
-			</tr> -->
 			<tr>
 				<th><?php echo __('Group'); ?></th>
 				<td>
@@ -58,22 +51,18 @@
 		<div class="table-responsive">
 			<table class="table table-bordered">
 				<tr>
-					<!-- <th><?php echo __('Id'); ?></th> -->
 					<th><?php echo __('Title'); ?></th>
 					<th><?php echo __('Body'); ?></th>
 					<th><?php echo __('Created'); ?></th>
 					<th><?php echo __('Modified'); ?></th>
-					<!-- <th><?php echo __('User Id'); ?></th> -->
 					<th class="actions"><?php echo __('Actions'); ?></th>
 				</tr>
 				<?php foreach ($user['Post'] as $post): ?>
 				<tr>
-					<!-- <td><?php echo $post['id']; ?></td> -->
 					<td><?php echo $post['title']; ?></td>
 					<td><?php echo $post['body']; ?></td>
 					<td><?php echo $post['created']; ?></td>
 					<td><?php echo $post['modified']; ?></td>
-					<!-- <td><?php echo $post['user_id']; ?></td> -->
 					<td class="actions">
 						<?php echo $this->Html->link(__('View'), array('controller' => 'posts', 'action' => 'view', $post['id'])); ?>
 						<?php echo $this->Html->link(__('Edit'), array('controller' => 'posts', 'action' => 'edit', $post['id'])); ?>

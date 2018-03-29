@@ -15,35 +15,45 @@ class PostsController extends AppController {
 
 		// $this->set_categories_and_tags();
 		// $this->set_archives();
+
+		$this->Post->virtualFields['created_fmt'] = "DATE_FORMAT(Post.created,'%Y年%c月%e日')";
+		$this->Post->virtualFields['modified_fmt'] = "DATE_FORMAT(Post.modified,'%Y年%c月%e日')";
 	}
 
-	public function index($created_year = null) {
+	public function index() {
 
 		$this->Post->recursive = 0;
-		$this->Prg->commonProcess(); // ここでgetとしてリダイレクトされる(データがクエリストリング形式になる)
+		$this->Prg->commonProcess(); // ここでgetとしてリダイレクトされ、データがクエリストリング形式になる
 
-		// debug($created_year);
-		// debug($this->Prg->parsedParams());
-		// debug($this->passedArgs);
-		// debug($this->Post->parseCriteria($this->passedArgs));
-		// exit;
+		// カテゴリーが未指定の場合、リクエストデータから取り除く
+		if (empty($this->request->query['category_id'][0])) {
+			unset($this->request->query['category_id']);
+		}
 
-		if (is_null($created_year)) {
 
-			$this->paginate = array('conditions' => array($this->Post->parseCriteria($this->passedArgs)
+		// 検索条件の設定（記事の年指定がある場合はconditionsに追加する）
+		if (empty($this->request->query['year'])) {
+			$this->paginate = array('conditions' => array($this->Post->parseCriteria($this->request->query)
 														  ,'Post.delete_flag' => 0), //モデルにget_condition()などを書く。（配列を返すメソッド）
+									'limit' => PAGINATE_LIMIT,
 									'order' => array('Post.id' => 'desc'));
 
 		} else {
 			$this->Post->virtualFields['created_year'] = 'SUBSTRING(Post.created, 1, 4)';
-			$this->paginate = array('conditions' => array($this->Post->parseCriteria($this->passedArgs)
+			$this->paginate = array('conditions' => array($this->Post->parseCriteria($this->request->query)
 														  ,'Post.delete_flag' => 0
-														  ,'Post.created_year' => $created_year),
+														  ,'Post.created_year' => $this->request->query['year']),
+									'limit' => PAGINATE_LIMIT,
 									'order' => array('Post.id' => 'desc'));
 		}
 
 
-	 	$this->set('posts', $this->paginate());
+		$this->loadModel('Category');
+		unset($this->Category->validate['category_name']['notBlank']);
+		if($this->Category->validates()){
+			$this->set('posts', $this->paginate());
+		}
+	 	
 		$this->set_categories_and_tags();
 		$this->set_archives();
 	}

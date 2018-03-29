@@ -28,6 +28,5 @@ class Tag extends AppModel {
                                         'unique' => true
                                      )
                                 );
-
-
+    
 }

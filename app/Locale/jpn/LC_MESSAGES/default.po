@@ -97,6 +97,10 @@ msgstr ""
 msgid "Your username or password was incorrect."
 msgstr ""
 
+#: Controller/UsersController.php:56
+msgid "Good-Bye"
+msgstr ""
+
 #: Controller/UsersController.php:70;93;114
 msgid "Invalid user"
 msgstr ""
@@ -216,6 +220,10 @@ msgstr ""
 #: Plugin/Upload/Model/Behavior/UploadBehavior.php:1091
 msgid "No filename after parsing. Function %s returned an invalid filename"
 msgstr ""
+
+#: View/Elements/header.ctp:51
+msgid "sign up"
+msgstr "新規登録"
 
 #: View/Categories/add.ctp:8
 #: View/Categories/index.ctp:7

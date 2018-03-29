@@ -1,25 +1,30 @@
 <?php echo $this->Html->script('jquery-1.12.4', array('inline' => false)); ?>
 <?php echo $this->Html->script('modal_window', array('inline' => false)); ?>
-<?php echo $this->Html->css('modal_window'); ?>
 <?php echo $this->Html->script('bootstrap'); ?>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-8 posts view">
+
         	<div>
-        		<h1><?php echo h($post['Post']['title']); ?><h1>
+        		<h3><strong><?php echo h($post['Post']['title']); ?></strong><h3>
         	</div>
 
             <div>
-                <?php echo __('Created'); ?>
-                <?php echo h($post['Post']['created']); ?>
-                <?php echo __('Modified'); ?>
-                <?php echo h($post['Post']['modified']); ?>
-                &nbsp;
+                <p class="post_date post_date_view">
+                    <?php echo __('Created'); ?>
+                    <?php echo h($post['Post']['created_fmt']); ?>
+                </p>
+                <p class="post_date post_date_view">
+                    <?php echo __('Modified'); ?>
+                    <?php echo h($post['Post']['modified_fmt']); ?>
+                </p>
 
-                <?php echo __('by'); ?>
-                <?php echo $this->Html->link($post['User']['username'], array('controller' => 'users', 'action' => 'view', $post['User']['id'])); ?>
+                <p class="post_writer post_writer_view">
+                    <?php echo __('by'); ?>
+                    <?php echo $this->Html->link($post['User']['username'], array('controller' => 'users', 'action' => 'view', $post['User']['id'])); ?>
                 &nbsp;
+                </p>
             </div>
 
         	<div class="post_body">
@@ -89,8 +94,8 @@
 <div id="overlay"></div>
     <?php
         echo $this->Html->div(
-            'modal_content',                                    //divのクラス名
-             '<a id="prev" class="slide_arrow" style="display: block;"></a>'.    //divのテキスト
+            'modal_content',                                                  //divのクラス名
+             '<a id="prev" class="slide_arrow" style="display: block;"></a>'. //divのテキスト
              '<a id="next" class="slide_arrow" style="display: block;"></a>'
         );
     ?>

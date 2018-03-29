@@ -47,7 +47,6 @@ class Post extends AppModel {
 		array('name' => 'tag_id',
 			  'type' => 'subquery',
 			  'method' => 'findByTags',
-		  	  // 'field' => 'Tag.id')
 			  'field' => 'Post.id'
 		),
 	);
@@ -99,8 +98,6 @@ class Post extends AppModel {
 			 'className' => 'Image',
 			 'foreignKey' => 'post_id',
 			 'conditions' => array(
-			  // 'Image.model' => 'Post',
-			  // 'Image.active' => 1
 			  'Image.delete_flag' => 0
 			 )
 		 )
