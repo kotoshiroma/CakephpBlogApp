@@ -375,8 +375,13 @@ msgid "group_id"
 msgstr ""
 
 #: View/Elements/form_user.ctp:7
+#: View/Users/view.ctp:31
 msgid "Post_Code"
 msgstr "郵便番号"
+
+#: View/Users/view.ctp:8
+msgid "Address"
+msgstr "住所"
 
 #: View/Elements/form_user.ctp:8
 msgid "Address1"
