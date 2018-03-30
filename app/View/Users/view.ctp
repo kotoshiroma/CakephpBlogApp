@@ -28,6 +28,19 @@
 				</td>
 			</tr>
 			<tr>
+				<th><?php echo __('Post_Code'); ?></th>
+				<td>
+					<?php echo h($user['User']['post_code']); ?>
+					&nbsp;
+				</td>
+			</tr>				<tr>
+				<th><?php echo __('Address'); ?></th>
+				<td>
+					<?php echo h($user['User']['address1']).' '.h($user['User']['address2']); ?>
+					&nbsp;
+				</td>
+			</tr>			
+			<tr>
 				<th><?php echo __('Created'); ?></th>
 				<td>
 					<?php echo h($user['User']['created']); ?>
@@ -59,14 +72,18 @@
 				</tr>
 				<?php foreach ($user['Post'] as $post): ?>
 				<tr>
-					<td><?php echo $post['title']; ?></td>
-					<td><?php echo $post['body']; ?></td>
-					<td><?php echo $post['created']; ?></td>
-					<td><?php echo $post['modified']; ?></td>
-					<td class="actions">
-						<?php echo $this->Html->link(__('View'), array('controller' => 'posts', 'action' => 'view', $post['id'])); ?>
-						<?php echo $this->Html->link(__('Edit'), array('controller' => 'posts', 'action' => 'edit', $post['id'])); ?>
-						<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'posts', 'action' => 'delete', $post['id']), array('confirm' => __('Are you sure you want to delete # %s?', $post['id']))); ?>
+					<td class="td_title">
+						<?php echo $this->Html->link($post['title'], array('controller' => 'posts', 'action' => 'view', $post['id'])); ?>
+					</td>
+					<td class="td_post_body"><?php echo $post['body']; ?></td>
+					<td class="td_created"><?php echo $post['created']; ?></td>
+					<td class="td_modified"><?php echo $post['modified']; ?></td>
+					<td class="td_actions">
+						<?php echo $this->Html->link(__('Edit'), array('controller' => 'posts', 'action' => 'edit', $post['id'])
+																,array('class' => 'btn btn-primary btn-xs')); ?>
+						<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'posts', 'action' => 'delete', $post['id'])
+																	 , array('class' => 'btn btn-primary btn-xs')
+																	 , array('confirm' => __('Are you sure you want to delete # %s?', $post['id']))); ?>
 					</td>
 				</tr>
 				<?php endforeach; ?>

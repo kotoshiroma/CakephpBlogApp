@@ -47,7 +47,6 @@
 					<tr>
 						<th><?php echo __('Id'); ?></th>
 						<th><?php echo __('Username'); ?></th>
-						<th><?php echo __('Password'); ?></th>
 						<th><?php echo __('Group Id'); ?></th>
 						<th><?php echo __('Created'); ?></th>
 						<th><?php echo __('Modified'); ?></th>
@@ -57,15 +56,18 @@
 					<?php foreach ($group['User'] as $user): ?>
 					<tr>
 						<td><?php echo $user['id']; ?></td>
-						<td><?php echo $user['username']; ?></td>
-						<td><?php echo $user['password']; ?></td>
+						<td>
+							<?php echo $this->Html->link($user['username'], array('controller' => 'users', 'action' => 'view', $user['id'])); ?>
+						</td>
 						<td><?php echo $user['group_id']; ?></td>
 						<td><?php echo $user['created']; ?></td>
 						<td><?php echo $user['modified']; ?></td>
 						<td class="actions">
-							<?php echo $this->Html->link(__('View'), array('controller' => 'users', 'action' => 'view', $user['id'])); ?>
-							<?php echo $this->Html->link(__('Edit'), array('controller' => 'users', 'action' => 'edit', $user['id'])); ?>
-							<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'users', 'action' => 'delete', $user['id']), array('confirm' => __('Are you sure you want to delete # %s?', $user['id']))); ?>
+							<?php echo $this->Html->link(__('Edit'), array('controller' => 'users', 'action' => 'edit', $user['id'])
+																   , array('class' => 'btn btn-primary btn-xs')); ?>
+							<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'users', 'action' => 'delete', $user['id'])
+																		 , array('class' => 'btn btn-primary btn-xs')
+																		 , array('confirm' => __('Are you sure you want to delete # %s?', $user['id']))); ?>
 						</td>
 					</tr>
 					<?php endforeach; ?>

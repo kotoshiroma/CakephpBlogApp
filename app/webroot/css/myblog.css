@@ -157,6 +157,25 @@ select#UserGroupId {
     margin-left: 10px;
 }
 
+.td_title {
+    width: 20%;
+}
+
+.td_post_body {
+    width: 50%;
+}
+
+.td_created {
+    width: 10%;
+}
+
+.td_modified {
+    width: 10%;
+}
+
+.td_actions {
+    width: 10%;
+}
 
 /* sidebar ------------------------------------------------------ */
 .sidebar {
