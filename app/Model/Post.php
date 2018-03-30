@@ -4,6 +4,14 @@ App::uses('AppModel', 'Model');
 
 class Post extends AppModel {
 
+	public $virtualFields = array(
+
+		'created_fmt' => 'DATE_FORMAT(Post.created,"%Y年%c月%e日")'
+	   ,'modified_fmt' => 'DATE_FORMAT(Post.modified,"%Y年%c月%e日")'
+	   ,'created_year' => 'SUBSTRING(Post.created, 1, 4)'
+	   // ,'cnt_of_post' => 'COUNT(*)'
+	);
+
 	public $validate = array(
 
 		'title' => array(
@@ -64,6 +72,19 @@ class Post extends AppModel {
 	    return $query;
 	}
 
+
+	public $findMethods = array('existPosts' => true);
+
+	protected function _findExistPosts($state, $query, $results = array()) {
+
+		if ($state == 'before') {
+			$query['conditions']['Post.delete_flag'] = 0;
+			// $query['limit'] = 5;
+			$query['order']['Post.id'] = 'desc';
+			return $query;
+		}
+		return $results;
+	}
 
 	public $belongsTo = array(
 		'User' => array(

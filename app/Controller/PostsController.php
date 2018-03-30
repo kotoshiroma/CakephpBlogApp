@@ -12,18 +12,12 @@ class PostsController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->allow('index', 'view');
-
-		// $this->set_categories_and_tags();
-		// $this->set_archives();
-
-		$this->Post->virtualFields['created_fmt'] = "DATE_FORMAT(Post.created,'%Y年%c月%e日')";
-		$this->Post->virtualFields['modified_fmt'] = "DATE_FORMAT(Post.modified,'%Y年%c月%e日')";
 	}
 
 	public function index() {
 
 		$this->Post->recursive = 0;
-		$this->Prg->commonProcess(); // ここでgetとしてリダイレクトされ、データがクエリストリング形式になる
+		$this->Prg->commonProcess(); // ここでgetとしてリダイレクトされ、フォームデータがクエリストリング形式になる
 
 		// カテゴリーが未指定の場合、リクエストデータから取り除く
 		if (empty($this->request->query['category_id'][0])) {
@@ -32,24 +26,24 @@ class PostsController extends AppController {
 
 
 		// 検索条件の設定（記事の年指定がある場合はconditionsに追加する）
-		if (empty($this->request->query['year'])) {
-			$this->paginate = array('conditions' => array($this->Post->parseCriteria($this->request->query)
-														  ,'Post.delete_flag' => 0), //モデルにget_condition()などを書く。（配列を返すメソッド）
-									'limit' => PAGINATE_LIMIT,
-									'order' => array('Post.id' => 'desc'));
+		if (empty($this->request->query['year'])) {		
+			$this->paginate = array('findType' => 'existPosts',
+									'conditions' => array($this->Post->parseCriteria($this->request->query))
+								   ,'limit' => PAGINATE_LIMIT
+								   ); 
 
 		} else {
-			$this->Post->virtualFields['created_year'] = 'SUBSTRING(Post.created, 1, 4)';
-			$this->paginate = array('conditions' => array($this->Post->parseCriteria($this->request->query)
-														  ,'Post.delete_flag' => 0
-														  ,'Post.created_year' => $this->request->query['year']),
-									'limit' => PAGINATE_LIMIT,
-									'order' => array('Post.id' => 'desc'));
+			$this->paginate = array('findType' => 'existPosts',
+									'conditions' => array($this->Post->parseCriteria($this->request->query)
+														  ,'Post.created_year' => $this->request->query['year'])
+								   ,'limit' => PAGINATE_LIMIT
+								   );
 		}
 
-
+		// 検索時は、カテゴリーのバリデーションを外す
 		$this->loadModel('Category');
 		unset($this->Category->validate['category_name']['notBlank']);
+		
 		if($this->Category->validates()){
 			$this->set('posts', $this->paginate());
 		}
@@ -79,12 +73,7 @@ class PostsController extends AppController {
 			$this->request->data['Post']['category_id'] = $this->request->data['Post']['category_id'][0];
 
 			// 画像配列が空の場合、リクエストデータから取り除く
-			$count = count($this->request->data['Image']);
-			for ($i = 0; $i < $count; $i++) {
-				if ($this->request->data['Image'][$i]['file_name']['name'] === "") {
-					unset($this->request->data['Image'][$i]);
-				}
-			}
+			$this->rm_empty_imgArray();
 
 			$this->Post->create();
 			if ($this->Post->saveAll($this->request->data)) {
@@ -103,18 +92,26 @@ class PostsController extends AppController {
 			throw new NotFoundException(__('Invalid post'));
 		}
 
+		$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
+		$data = $this->Post->find('first', $options);
+		$this->set('post', $data);
+
+		$tagVal = array();
+		foreach ($data['Tag'] as $tag) {
+			$tagVal[] = intval($tag['id']);
+		}
+		$this->set('tagVal', $tagVal);
+		$this->set_categories_and_tags();
+
+
+		// 編集データがフォームから送信されてきた場合
 		if ($this->request->is(array('post', 'put'))) {
 
 			$this->request->data['Tag'] = $this->request->data['Tag']['tag_id'];
 			$this->request->data['Post']['category_id'] = $this->request->data['Post']['category_id'][0];
 
 			// 画像配列が空の場合、リクエストデータから取り除く
-			$count = count($this->request->data['Image']);
-			for ($i = 0; $i < $count; $i++) {
-				if ($this->request->data['Image'][$i]['file_name']['name'] === "") {
-					unset($this->request->data['Image'][$i]);
-				}
-			}
+			$this->rm_empty_imgArray();
 
 			// 画像の論理削除
 			if (isset($this->request->data['chkBox'])) {
@@ -141,34 +138,13 @@ class PostsController extends AppController {
 				$this->redirect($this->referer());
 			// 更新失敗
 			} else {
+
 				$this->Flash->error(__('The post could not be saved. Please, try again.'));
-
-				$this->set_categories_and_tags();
-
-				$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
-				$data = $this->Post->find('first', $options);
-				$this->set('post', $data);
-
-				$tagVal = array();
-				foreach ($data['Tag'] as $tag) {
-					$tagVal[] = intval($tag['id']);
-				}
-				$this->set('tagVal', $tagVal);
 			}
+		// 編集画面へ遷移・表示
 		} else {
-			$this->set_categories_and_tags();
-
-			$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
-			$data = $this->Post->find('first', $options);
+			// 既存データを、入力フォーム(タイトル、本文)へセットする
 			$this->request->data = $data;
-			$this->set('post', $data);
-
-			$tagVal = array();
-			foreach ($data['Tag'] as $tag) {
-				$tagVal[] = intval($tag['id']);
-			}
-			$this->set('tagVal', $tagVal);
-			
 		}
 	}
 
@@ -189,6 +165,10 @@ class PostsController extends AppController {
 	}
 
 
+
+
+
+/* privateメソッド --------------------------------------------------------------------------------- */
 	private function set_categories_and_tags() {
 
 		$this->loadModel('Category');
@@ -201,10 +181,8 @@ class PostsController extends AppController {
 
 	}
 
-	// モデルにこれを書く
 	private function set_archives() {
 
-		$this->Post->virtualFields['created_year'] = 'SUBSTRING(Post.created, 1, 4)';
 		$this->Post->virtualFields['cnt_of_post'] = 'COUNT(*)';
 		$this->Post->recursive = -1;
 		$data = $this->Post->find('all',array(
@@ -215,5 +193,15 @@ class PostsController extends AppController {
 									  ));
 
 		$this->set('created_years', $data);
+	}
+
+	private function rm_empty_imgArray() {
+
+		$count = count($this->request->data['Image']);
+		for ($i = 0; $i < $count; $i++) {
+			if ($this->request->data['Image'][$i]['file_name']['name'] === "") {
+				unset($this->request->data['Image'][$i]);
+			}
+		}
 	}
 }
