@@ -46,7 +46,15 @@ $(document).ready(function(){
 
         timer = setInterval(checkSize, 1);
 
-        $('#overlay, .modal_content').fadeIn('slow');
+        // 画像が1枚しかない場合、矢印ボタンを隠した後に、モーダルウィンドウを表示する
+        if ($('.Images_thumb > img').length === 1) {
+            $('#prev, #next').fadeOut('fast', function() {
+
+                $('#overlay, .modal_content').fadeIn('slow');
+            });
+        } else {
+            $('#overlay, .modal_content').fadeIn('slow');
+        }
     });
 
     // スライド切り替え矢印ボタンクリックイベント
@@ -85,8 +93,6 @@ $(document).ready(function(){
 
             var img_pass = imgs.eq(_current_idx).attr('src').replace('thumb_', '');
             var img = $('<img src="' + img_pass + '" class="modal_image" />');
-            // img.attr('style', 'display:none;');
-            
             img.appendTo('.modal_content');
 
             timer = setInterval(checkSize, 1);
