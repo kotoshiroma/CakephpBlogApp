@@ -5,18 +5,19 @@ App::uses('AppController', 'Controller');
 
 class PostsController extends AppController {
 
-	public $components = array('Paginator', 'Search.Prg');
+	public $components = array('Paginator', 'Search.Prg', 'RequestHandler');
 	public $presetVars = true; // モデルでの $filterArgs設定の有効化
 
 
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('index', 'view', 'delete');
+		$this->Auth->allow('index', 'view', 'delete', 'mypage', 'mypage_index', 'get_post');
 	}
 
 	public function index() {
 
-		$this->Post->recursive = 0;
+		$this->Post->recursive = 1;
+
 		$this->Prg->commonProcess(); // ここでgetとしてリダイレクトされ、フォームデータがクエリストリング形式になる
 
 		// カテゴリーが未指定の場合、リクエストデータから取り除く
@@ -24,32 +25,24 @@ class PostsController extends AppController {
 			unset($this->request->query['category_id']);
 		}
 
-
-		// 検索条件の設定（記事の年指定がある場合はconditionsに追加する）
-		if (empty($this->request->query['year'])) {		
-			$this->paginate = array('findType' => 'existPosts',
-									'conditions' => array($this->Post->parseCriteria($this->request->query))
-								   ,'limit' => PAGINATE_LIMIT
+		// 検索条件の設定
+		$this->paginate = array('findType' => 'existPosts'
+							   ,'conditions' => array($this->Post->parseCriteria($this->request->query)
+													 ,'publish_flag' => 1)
+							   ,'limit' => PAGINATE_LIMIT
 								   ); 
-
-		} else {
-			$this->paginate = array('findType' => 'existPosts',
-									'conditions' => array($this->Post->parseCriteria($this->request->query)
-														  ,'Post.created_year' => $this->request->query['year'])
-								   ,'limit' => PAGINATE_LIMIT
-								   );
-		}
 
 		// 検索時は、カテゴリーのバリデーションを外す
 		$this->loadModel('Category');
 		unset($this->Category->validate['category_name']['notBlank']);
-		
+
 		if($this->Category->validates()){
 			$this->set('posts', $this->paginate());
 		}
-	 	
+
 		$this->set_categories_and_tags();
 		$this->set_archives();
+
 	}
 
 
@@ -57,6 +50,7 @@ class PostsController extends AppController {
 		if (!$this->Post->exists($id)) {
 			throw new NotFoundException(__('Invalid post'));
 		}
+
 		$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
 		$this->set('post', $this->Post->find('first', $options));
 		$this->set_categories_and_tags();
@@ -69,6 +63,11 @@ class PostsController extends AppController {
 
 		if ($this->request->is('post')) {
 
+			// submitボタンが「公開する」だった場合は、公開フラグを立てる
+			if (array_key_exists('submit_publish', $this->request->data)) {
+				$this->request->data['Post']['publish_flag'] = 1;
+			}
+
 			$this->request->data['Tag'] = $this->request->data['Tag']['tag_id'];
 			$this->request->data['Post']['category_id'] = $this->request->data['Post']['category_id'][0];
 
@@ -78,7 +77,7 @@ class PostsController extends AppController {
 			$this->Post->create();
 			if ($this->Post->saveAll($this->request->data)) {
 				$this->Flash->success(__('The post has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('action' => 'mypage_index'));
 			} else {
 				$this->Flash->error(__('The post could not be saved. Please, try again.'));
 			}
@@ -106,6 +105,15 @@ class PostsController extends AppController {
 
 		// 編集データがフォームから送信されてきた場合
 		if ($this->request->is(array('post', 'put'))) {
+
+			// submitボタンが「公開する」だった場合は、公開フラグを立てる
+			if (array_key_exists('submit_publish', $this->request->data)) {
+				$this->request->data['Post']['publish_flag'] = 1;
+			}
+			// submitボタンが「下書き保存する」だった場合は、公開フラグを戻す
+			else {
+				$this->request->data['Post']['publish_flag'] = 0;
+			}
 
 			$this->request->data['Tag'] = $this->request->data['Tag']['tag_id'];
 			$this->request->data['Post']['category_id'] = $this->request->data['Post']['category_id'][0];
@@ -135,7 +143,7 @@ class PostsController extends AppController {
 				}
 
 				$this->Flash->success(__('The post has been saved.'));
-				$this->redirect($this->referer());
+				$this->redirect(array('action' => 'mypage_index'));
 			// 更新失敗
 			} else {
 
@@ -149,24 +157,103 @@ class PostsController extends AppController {
 	}
 
 	// 削除処理（論理削除）
-	public function delete($id = null) {
-		$this->Post->id = $id;
-		if (!$this->Post->exists()) {
-			throw new NotFoundException(__('Invalid post'));
-		}
-		$this->request->allowMethod('post', 'delete');
+	public function delete() {
 
-		if ($this->Post->save(array('delete_flag' => 1))) {
-			$this->Flash->success(__('The post has been deleted.'));
-		} else {
-			$this->Flash->error(__('The post could not be deleted. Please, try again.'));
+		if ($this->request->is('get')) {
+			throw new InternalErrorException('記事の削除に失敗しました');
 		}
-		return $this->redirect(array('action' => 'index'));
+
+		if (!array_key_exists('post_id', $this->request->data)) {
+			$this->Flash->error(__('The post could not be deleted. Please, try again.'));
+			return $this->redirect($this->referer());
+		}
+
+		$del_success_flg = true;
+		foreach($this->request->data['post_id'] as $id) {
+
+			$this->Post->id = $id;
+			if (!$this->Post->exists()) {
+				throw new NotFoundException(__('Invalid post'));
+			}
+
+			// 削除失敗した場合
+			if (!$this->Post->save(array('delete_flag' => 1))) {
+				$del_success_flg = false;
+			} 
+		}
+		
+		if ($del_success_flg) {
+			$this->Flash->success('記事が正常に削除されました');
+		} else {
+			$this->Flash->error(__('記事の削除に失敗しました'));
+		}
+
+		return $this->redirect($this->referer());
 	}
 
 
+	public function mypage() {
 
+		$this->Post->recursive = -1;
+		$data = $this->Post->find('count'
+								  ,array(
+										 'conditions' => array('delete_flag' => 0
+															  ,'user_id' => $this->Auth->user('id')
+									  						  )));
 
+		$this->set('posts_count', $data);
+	}
+
+	public function mypage_index() {
+
+		// 公開記事
+		$this->paginate = array('findType' => 'existPosts'
+							   ,'conditions' => array('user_id' => $this->Auth->user('id')
+													 ,'publish_flag' => 1)
+							   ,'limit' => PAGINATE_LIMIT
+							   );
+
+		$this->set('posts_publish', $this->paginate());
+	}
+
+/* ajaxメソッド --------------------------------------------------------------------------------- */
+
+    public function get_post() {
+
+        $this->autoRender = false;
+
+        if (!$this->request->is('ajax')) {
+            return;
+        }
+
+        $condition1 = array('user_id' => $this->Auth->user('id'));
+        $condition2 = array();
+
+        if ($this->request->data['kind_of_post'] == "publish_post") 
+        {
+        	$condition2 = array('publish_flag' => 1);
+        }
+        elseif ($this->request->data['kind_of_post'] == "draft_post")
+        {
+        	$condition2 = array('publish_flag' => 0);
+        }
+        elseif ($this->request->data['kind_of_post'] == "all_post") 
+        {
+        }
+        else 
+        {
+        }
+
+        $conditions = array_merge($condition1, $condition2);
+
+		$this->paginate = array('findType' => 'existPosts'
+							   ,'conditions' => $conditions
+							   ,'limit' => PAGINATE_LIMIT
+							   );
+
+        $this->RequestHandler->respondAs('application/json; charset=UTF-8');
+        return json_encode($this->paginate());
+    }
 
 /* privateメソッド --------------------------------------------------------------------------------- */
 	private function set_categories_and_tags() {
@@ -187,7 +274,7 @@ class PostsController extends AppController {
 		$this->Post->recursive = -1;
 		$data = $this->Post->find('all',array(
 												'fields' => array('created_year', 'cnt_of_post')
-											   ,'conditions' => array('delete_flag' => 0)
+											   ,'conditions' => array('delete_flag' => 0, 'publish_flag' => 1)
 											   ,'group' => 'created_year'
 											   ,'order' => 'created_year DESC'
 									  ));
