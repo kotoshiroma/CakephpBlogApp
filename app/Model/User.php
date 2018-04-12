@@ -24,6 +24,10 @@ class User extends AppModel {
 				'message' => '※入力必須項目です。'
 			),
 			'rule2' => array(
+				'rule' => 'alphaNumeric',
+				'message' => '※半角英数字で入力してください。'
+			),
+			'rule3' => array(
 				'rule' => array('between', 6, 14),
 				'message' => '※6文字以上、14文字以内で入力してください。'
 			)
@@ -127,8 +131,11 @@ class User extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		)
+       ,'Comment' => array (
+            'className' => 'Comment',
+            'foreignKey' => 'user_id',
+        )
 	);
-
 
 	public function parentNode() {
         if (!$this->id && empty($this->data)) {

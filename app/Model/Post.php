@@ -57,6 +57,11 @@ class Post extends AppModel {
 			  'method' => 'findByTags',
 			  'field' => 'Post.id'
 		),
+		
+		array('name' => 'year',
+			  'type' => 'value',
+		      'field' => 'Post.created_year'
+		),
 	);
 
 	public function findByTags($data = array()) {
@@ -121,6 +126,10 @@ class Post extends AppModel {
 			 'conditions' => array(
 			  'Image.delete_flag' => 0
 			 )
+		 )
+		,'Comment' => array (
+			 'className' => 'Comment',
+			 'foreignKey' => 'post_id',
 		 )
 	 );
 }
