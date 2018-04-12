@@ -32,6 +32,12 @@
 		    	</div>
 			<?php endforeach; ?>
 
+
+			<?php if (count($posts) == 0) { ?>
+				<h2><?php echo 'まだ記事がありません'; ?></h2>
+			<?php } ?>
+			
+
 			<?php echo $this->element('pagination'); ?>
 		</div>
 
