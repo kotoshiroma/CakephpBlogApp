@@ -11,5 +11,5 @@
 				echo $this->element('form_user');
 			?>
 		</fieldset>
-	<?php echo $this->Form->end(array('label' => __('Submit'), 'class' => 'btn btn-primary btn_sm')); ?>
+	<?php echo $this->Form->end(array('label' => __('Save'), 'class' => 'btn btn-primary btn_s')); ?>
 </div>

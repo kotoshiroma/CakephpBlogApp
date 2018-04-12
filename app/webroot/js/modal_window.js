@@ -47,7 +47,7 @@ $(document).ready(function(){
         timer = setInterval(checkSize, 1);
 
         // 画像が1枚しかない場合、矢印ボタンを隠した後に、モーダルウィンドウを表示する
-        if ($('.Images_thumb > img').length === 1) {
+        if ($('.Images_thumb').find('img').length === 1) {
             $('#prev, #next').fadeOut('fast', function() {
 
                 $('#overlay, .modal_content').fadeIn('slow');
@@ -64,8 +64,8 @@ $(document).ready(function(){
 
             $('.modal_content').children('img').remove();
 
-            var img_count = $('.Images_thumb > img').length;
-            var imgs = $('.Images_thumb > img');
+            var img_count = $('.Images_thumb').find('img').length;
+            var imgs = $('.Images_thumb').find('img');
 
             // 先頭の要素の場合
             if (_current_idx == 0) {

@@ -12,12 +12,19 @@
             <fieldset>
                 <h3><?php echo __('Search'); ?></h3>
                 <?php echo $this->Form->input('keyword', array('label' => __('keyword'),
-                                                               'class' => 'keyword')); ?>
-                <?php echo $this->Form->input('category_id', array ('label' => __('Categories'),
-                                                                    'multiple' => 'select',
-                                                                    'empty' => '未選択')); ?>
+                                                               'class' => 'keyword',
+                                                               'placeholder' => '記事タイトルで検索')); ?>
+
+                <div class="categories categories_sidebar">
+                <?php echo $this->Form->input('category_id', array ('label' => __('Categories')
+                                                                   ,'multiple' => 'select'
+                                                                   ,'empty' => '未選択'
+                                                                   ,'div' => false
+                                                                    )); ?>
+                </div>
                 <?php echo $this->Form->input('tag_id', array ('label' => __('Tags'),
                                                                'multiple' => 'checkbox',
+                                                               // 'class' => 'chk_tag',
                                                                )); ?>
             </fieldset>
         <?php echo $this->Form->end(array('class' => 'btn btn-primary', 'label' => __('Search'))); ?>

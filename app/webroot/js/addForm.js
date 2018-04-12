@@ -13,7 +13,6 @@ $(function(){
   function addForm() {
     form_cnt++;
 
-    // var lastForm = $('#imageForms').find(':last').prev();
     var lastForm = $('.input_file:last').find('input');
     var name = lastForm.attr('name');
     var id = lastForm.attr('id');

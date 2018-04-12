@@ -10,6 +10,7 @@ class TagsController extends AppController {
 
 	public function beforeFilter() {
 		parent::beforeFilter();
+		$this->Auth->allow('index', 'view', 'add', 'edit', 'delete');
 	}
 
 	public function index() {

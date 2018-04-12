@@ -24,6 +24,7 @@ $(document).ready(function(){
             console.log('fail');
             console.log(textStatus);
             console.log(jqXHR);
+            console.log(errorThrown);
         })
     });
 

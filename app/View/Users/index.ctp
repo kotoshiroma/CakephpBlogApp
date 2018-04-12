@@ -30,8 +30,9 @@
 						<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $user['User']['id'])
 															   , array('class' => 'btn btn-primary btn-xs')); ?>
 						<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $user['User']['id'])
-																	 , array('class' => 'btn btn-primary btn-xs')
-																	 , array('confirm' => __('Are you sure you want to delete # %s?', $user['User']['id']))); ?>
+																	 , array('class' => 'btn btn-warning btn-xs')
+																	 , '削除してよろしいですか？'
+																	 ); ?>
 					</td>
 				</tr>
 				<?php endforeach; ?>

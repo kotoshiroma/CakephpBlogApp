@@ -247,6 +247,15 @@ msgstr "カテゴリー追加"
 msgid "Submit"
 msgstr "送信"
 
+msgid "Save"
+msgstr "保存"
+
+msgid "Pubish"
+msgstr "公開する"
+
+msgid "Draft"
+msgstr "下書き保存する"
+
 #: View/Categories/edit.ctp:7
 msgid "Edit Category"
 msgstr "カテゴリー編集"
@@ -424,6 +433,12 @@ msgstr "このブログについて"
 msgid "CONTACT"
 msgstr "お問い合わせ"
 
+msgid "AccountSetting"
+msgstr "アカウント設定"
+
+msgid "MyPage"
+msgstr "マイページ"
+
 #: View/Elements/header.ctp:35
 msgid "Logout"
 msgstr "ログアウト"
@@ -522,6 +537,12 @@ msgstr "記事編集"
 msgid "New Post"
 msgstr "新規投稿"
 
+msgid "Dashboard"
+msgstr "ダッシュボード"
+
+msgid "Post Management"
+msgstr "記事管理"
+
 #: View/Posts/view.ctp:20
 msgid "by"
 msgstr ""
@@ -538,6 +559,9 @@ msgstr "タグ編集"
 #: View/Tags/view.ctp:24
 msgid "Tag Name"
 msgstr "タグ名"
+
+msgid "New User"
+msgstr "新規登録"
 
 #: View/Users/add.ctp:8
 #: View/Users/index.ctp:7

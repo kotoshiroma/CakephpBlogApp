@@ -1,10 +1,10 @@
 <?php echo $this->Html->script('jquery-1.12.4', array('inline' => false)); ?>
 <?php echo $this->Html->script('bootstrap'); ?>
 
-<div class="container groups index">
+<div class="container-fluid centering groups index">
 	
 	<h2 class="table_title"><?php echo __('Groups') ?></h2>
-	<?php echo $this->Html->link(__('Add Group'), array('action' => 'add'), array('class' => 'btn btn-success btn_add')); ?>
+	<?php echo $this->Html->link(__('Add Group'), array('action' => 'add'), array('class' => 'btn btn-success float_right')); ?>
 
 	<div class="table-responsive">
 		<table class="table table-hover">
@@ -28,8 +28,9 @@
 						<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $group['Group']['id'])
 															   , array('class' => 'btn btn-primary btn-xs')); ?>
 						<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $group['Group']['id'])
-																	 , array('class' => 'btn btn-primary btn-xs')
-																	 , array('confirm' => __('Are you sure you want to delete # %s?', $group['Group']['id']))); ?>
+																	 , array('class' => 'btn btn-warning btn-xs')
+																	 , '削除してよろしいですか？'
+																	 ); ?>
 					</td>
 				</tr>
 				<?php endforeach; ?>

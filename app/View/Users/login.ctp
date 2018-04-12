@@ -1,7 +1,7 @@
 <?php echo $this->Html->script('jquery-1.12.4', array('inline' => false)); ?>
 <?php echo $this->Html->script('bootstrap'); ?>
 
-<div class="container">
+<div class="container-fluid centering">
 <?php
 echo $this->Form->create('User', array('url' => 'login'));
 echo $this->Form->inputs(array(
@@ -10,7 +10,7 @@ echo $this->Form->inputs(array(
     'password'
 ));
 
-echo $this->Form->end(array('label' => __('Login'), 'class' => 'btn btn-primary btn_sm'));
+echo $this->Form->end(array('label' => __('Login'), 'class' => 'btn btn-primary btn_s'));
 ?>
 
 </div>

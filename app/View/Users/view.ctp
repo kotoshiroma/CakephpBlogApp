@@ -56,7 +56,7 @@
 			</tr>
 		</table>
 	</div>
-
+<!-- 
 	<div class="related">
 		<h3><?php echo __('Related Posts'); ?></h3>
 
@@ -91,5 +91,6 @@
 		</div>
 		<?php endif; ?>
 	</div>
+	 -->
 </div>
 

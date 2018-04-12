@@ -1,7 +1,7 @@
 <?php echo $this->Html->script('jquery-1.12.4', array('inline' => false)); ?>
 <?php echo $this->Html->script('bootstrap'); ?>
 
-<div class="container categories view">
+<div class="container-fluid centering categories view">
 
 	<h2 class="table_title"><?php echo h($category['Category']['category_name']); ?></h2>
 
