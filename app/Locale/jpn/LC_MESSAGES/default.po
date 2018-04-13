@@ -256,6 +256,18 @@ msgstr "公開する"
 msgid "Draft"
 msgstr "下書き保存する"
 
+msgid "Write Comment"
+msgstr "コメントを書く"
+
+msgid "contributor"
+msgstr "投稿者"
+
+msgid "comment"
+msgstr "コメント"
+
+msgid "Contribute"
+msgstr "投稿する"
+
 #: View/Categories/edit.ctp:7
 msgid "Edit Category"
 msgstr "カテゴリー編集"
