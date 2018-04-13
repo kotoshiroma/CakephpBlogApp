@@ -18,7 +18,7 @@
                 </tr>              
                  <tr>
                     <th><?php echo __('Comments') ?></th>
-                    <td><?php echo "" ?></td>
+                    <td><?php echo $comments_count; ?></td>
                 </tr>
             </table>
         </div>

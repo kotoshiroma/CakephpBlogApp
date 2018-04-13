@@ -58,36 +58,68 @@
         	</dl>
 
             <!-- コメント欄 -->
-<!--             <div>
-                <button id="popup_comment_open" class="btn btn-default">コメントを書く</button>
+            <div class="comments_view">
+                
+                <?php foreach ($post['Comment'] as $comment):?>
+                    <div class="comment_view">
+                        <div class="comment_view_contents">
+                            <h5 class="comment_contributor"><?php echo $comment['contributor']; ?></h5>
+                            <p><?php echo $comment['comment']; ?></p>
+                            <p class="comment_datetime"><?php echo $comment['created_fmt']; ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
-            <div id="comment_form">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <th>
-                                投稿者
-                            </th>
-                            <td>
-                                <input type="text" name="commentator">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                コメント
-                            </th>
-                            <td>
-                                <textarea name="comment_body" rows="5" cols="50"></textarea>
-                            </td>
-                        </tr>
-                        <tr class="submit">
-                            <td colspan="2" align="center">
-                                <input type="submit" class="btn btn-primary btn_s" value="投稿">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div> -->
+
+            <!-- コメントを書く -->
+            <div>
+                <button id="popup_comment_open" class="btn btn-default"><?php echo __('Write Comment'); ?></button>
+            </div>
+
+            <div id="popup_comment">
+                <div class="floatContainer">
+                    <i class="far fa-window-close popup_close_icon"></i>
+                </div>
+
+                <?php 
+                    echo $this->Form->create(
+                        'Comment', 
+                        array(
+                            'url' => array('controller' => 'posts', 'action' => 'add_comment'), 
+                            'novalidate' => true
+                        )
+                    ); 
+                ?>
+
+                    <?php echo $this->Form->input('Comment.user_id', array('type' => 'hidden', 'value' => $auth->user('id'))); ?>
+                    <?php echo $this->Form->input('Comment.post_id', array('type' => 'hidden', 'value' => $post['Post']['id'])); ?>
+                    <table class="">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <?php echo __('contributor'); ?>
+                                </th>
+                                <td class="contributor">
+                                    <?php echo $this->Form->input('contributor', array('class' => 'form_contributor', 'label' => false, 'div' => false)); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php echo __('comment'); ?>
+                                </th>
+                                <td class="comment">
+                                    <?php echo $this->Form->textarea('comment', array('class' => 'form_comment', 'rows' => '5', 'cols' => '50')); ?>
+                                </td>
+                            </tr>
+                            <tr class="submit">
+                                <td colspan="2" align="center">
+                                    <?php echo $this->Form->button(__('Contribute'), array('class' => 'btn btn-primary btn_m btn_contribute', 'disabled' => true)); ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <?php echo $this->Form->end(); ?>
+            </div>
 
         </div>
 

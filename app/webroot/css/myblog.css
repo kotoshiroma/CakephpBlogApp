@@ -527,17 +527,90 @@ input[type="submit"]#submit_draft {
     border-radius: 4px 0px 0px 4px;
 }
 
+/* コメント欄 ------------------------------------------------------ */
+
+/* コメント欄の大枠 */
+.comments_view {
+    border-top: 1px solid #ddd;
+    margin-bottom: 30px;
+}
+
+/* 各コメントの大枠 */
+.comment_view {
+    border-bottom: 1px solid #ddd;
+}
+
+/* 各コメントの中身(プロフィール画像を含まない部分) */
+.comment_view_contents {
+    margin-left: 70px;
+}
+
+/* コメント投稿者の名前 */
+.comment_contributor {
+    font-size: 110%;
+    font-weight: bold;
+}
+
+/* コメント投稿日時 */
+.comment_datetime {
+    color: gray;
+}
+
 /* コメントポップアップ ------------------------------------------------------ */
-#comment_form {
-    /*display: none;*/
+div#popup_comment {
+    display: none;
+    border: 1px solid #ddd;
+    padding: 10px;
+    position: relative;
+    top: -40px;
+    left: -5px;
+    z-index: 1;
+    background-color: white;
 }
 
 @media (min-width: 768px) {
-    #comment_form {
+    div#popup_comment {
         width: 75%;
     }
 }
 
+div#popup_comment table {
+    margin: 0px;
+}
+
+#popup_comment tr {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+#popup_comment tr.submit {
+    border-bottom: 0px;
+}
+
+#popup_comment th {
+    padding-right: 10px;
+}
+
+#popup_comment td.contributor {
+    height: 60px;
+}
+
+#popup_comment td.comment {
+    height: 150px;
+}
+
+#popup_comment tr.submit td {
+    height: 50px;
+}
+
+#popup_comment textarea {
+    
+    border: 1px solid #ddd;
+}
+
+.popup_close_icon {
+    float: right;
+}
 
 /* モーダルウィンドウ ------------------------------------------------------ */
 #overlay {

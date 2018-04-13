@@ -11,7 +11,7 @@ class PostsController extends AppController {
 
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('index', 'view', 'delete', 'mypage', 'mypage_index', 'get_post');
+		$this->Auth->allow('index', 'view', 'delete', 'mypage', 'mypage_index', 'get_post', 'add_comment');
 	}
 
 	public function index() {
@@ -144,14 +144,11 @@ class PostsController extends AppController {
 
 				$this->Flash->success(__('The post has been saved.'));
 				$this->redirect(array('action' => 'mypage_index'));
-			// 更新失敗
 			} else {
-
 				$this->Flash->error(__('The post could not be saved. Please, try again.'));
 			}
-		// 編集画面へ遷移・表示
 		} else {
-			// 既存データを、入力フォーム(タイトル、本文)へセットする
+			// 編集画面へ遷移/表示の場合、既存データを、入力フォーム(タイトル、本文)へセットする
 			$this->request->data = $data;
 		}
 	}
@@ -194,26 +191,57 @@ class PostsController extends AppController {
 
 	public function mypage() {
 
-		$this->Post->recursive = -1;
-		$data = $this->Post->find('count'
-								  ,array(
-										 'conditions' => array('delete_flag' => 0
-															  ,'user_id' => $this->Auth->user('id')
-									  						  )));
+		$posts = $this->Post->find('all',
+			array(
+				'conditions' => array(
+					'Post.delete_flag' => 0
+				   ,'user_id' => $this->Auth->user('id')
+				)
+			)
+		);
 
-		$this->set('posts_count', $data);
+		$posts_count = count($posts);
+		$comments_count = 0;
+		foreach ($posts as $post) {
+			$comments_count += count($post['Comment']);
+		}
+
+		$this->set(compact('posts_count', 'comments_count'));
 	}
 
 	public function mypage_index() {
 
 		// 公開記事
-		$this->paginate = array('findType' => 'existPosts'
-							   ,'conditions' => array('user_id' => $this->Auth->user('id')
-													 ,'publish_flag' => 1)
-							   ,'limit' => PAGINATE_LIMIT
-							   );
+		$this->paginate = array(
+			'findType' => 'existPosts'
+		   ,'conditions' => array(
+		   		'user_id' => $this->Auth->user('id')
+			   ,'publish_flag' => 1
+			)
+		   ,'limit' => PAGINATE_LIMIT
+		);
 
 		$this->set('posts_publish', $this->paginate());
+	}
+
+
+	public function add_comment() {
+		
+		$this->autoRender = false;
+
+		if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+		$this->loadModel('Comment');
+		if ($this->Comment->save($this->request->data)) {
+			
+			$this->Flash->success(__('The comment has been saved.'));
+			$this->redirect($this->referer());
+		} else {
+
+			$this->Flash->error(__('The comment could not be saved. Please, try again.'));
+		}
 	}
 
 /* ajaxメソッド --------------------------------------------------------------------------------- */
@@ -223,7 +251,7 @@ class PostsController extends AppController {
         $this->autoRender = false;
 
         if (!$this->request->is('ajax')) {
-            return;
+            throw new MethodNotAllowedException();
         }
 
         $condition1 = array('user_id' => $this->Auth->user('id'));
