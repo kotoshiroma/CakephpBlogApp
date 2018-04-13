@@ -6,11 +6,6 @@
     <nav class="navbar">
         <div class="header_start container-fluid">
             <ul class="nav navbar-nav">
-                <li>
-                    <!-- <i class="fas fa-home"></i> -->
-                    <?php echo $this->Html->link(__('HOME'), array('controller' => 'posts', 'action' => 'index'), array('class' => 'nav_li')); ?>
-                </li>
-
                 <?php if (is_null($auth->user('id'))) { ?>
                     <li><?php echo $this->Html->link(__('ABOUT'), array('controller' => 'posts', 'action' => 'index'), array('class' => 'nav_li')); ?></li>
                     <li><?php echo $this->Html->link(__('CONTACT'), array('controller' => 'posts', 'action' => 'index'), array('class' => 'nav_li')); ?></li>
