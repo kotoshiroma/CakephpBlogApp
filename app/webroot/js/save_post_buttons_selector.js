@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    $(document).on('click', '#dropdown_publish, #dropdown_draft', function(){
+    $(document).on('click', '#dropdown_publish, #dropdown_draft', function(e){
 
         if ($(this).attr('id') == 'dropdown_publish' ) {
             $('#submit_draft').attr('style', 'display: none;');
