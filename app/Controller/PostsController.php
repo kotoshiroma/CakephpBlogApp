@@ -18,7 +18,8 @@ class PostsController extends AppController {
 
 		$this->Post->recursive = 1;
 
-		$this->Prg->commonProcess(); // ここでgetとしてリダイレクトされ、フォームデータがクエリストリング形式になる
+		// ここでgetとしてリダイレクトされ、フォームデータがクエリストリング形式になる
+		$this->Prg->commonProcess();
 
 		// カテゴリーが未指定の場合、リクエストデータから取り除く
 		if (empty($this->request->query['category_id'][0])) {
@@ -26,23 +27,23 @@ class PostsController extends AppController {
 		}
 
 		// 検索条件の設定
-		$this->paginate = array('findType' => 'existPosts'
-							   ,'conditions' => array($this->Post->parseCriteria($this->request->query)
-													 ,'publish_flag' => 1)
-							   ,'limit' => PAGINATE_LIMIT
-								   ); 
+		$this->paginate = array(
+			'findType' => 'existPosts'
+		   ,'conditions' => array($this->Post->parseCriteria($this->request->query), 'publish_flag' => 1)
+		   ,'limit' => PAGINATE_LIMIT
+		); 
 
 		// 検索時は、カテゴリーのバリデーションを外す
 		$this->loadModel('Category');
 		unset($this->Category->validate['category_name']['notBlank']);
 
 		if($this->Category->validates()){
-			$this->set('posts', $this->paginate());
+			$posts = $this->paginate();
+			$this->set(compact('posts'));
 		}
 
 		$this->set_categories_and_tags();
 		$this->set_archives();
-
 	}
 
 
@@ -52,7 +53,8 @@ class PostsController extends AppController {
 		}
 
 		$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
-		$this->set('post', $this->Post->find('first', $options));
+		$post = $this->Post->find('first', $options);
+		$this->set(compact('post'));
 		$this->set_categories_and_tags();
 		$this->set_archives();
 	}
@@ -73,6 +75,7 @@ class PostsController extends AppController {
 
 			// 画像配列が空の場合、リクエストデータから取り除く
 			$this->rm_empty_imgArray();
+			debug($this->request->data['Image']);
 
 			$this->Post->create();
 			if ($this->Post->saveAll($this->request->data)) {
@@ -92,14 +95,13 @@ class PostsController extends AppController {
 		}
 
 		$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
-		$data = $this->Post->find('first', $options);
-		$this->set('post', $data);
+		$post = $this->Post->find('first', $options);
 
 		$tagVal = array();
-		foreach ($data['Tag'] as $tag) {
+		foreach ($post['Tag'] as $tag) {
 			$tagVal[] = intval($tag['id']);
 		}
-		$this->set('tagVal', $tagVal);
+		$this->set(compact('post', 'tagVal'));
 		$this->set_categories_and_tags();
 
 
@@ -149,7 +151,7 @@ class PostsController extends AppController {
 			}
 		} else {
 			// 編集画面へ遷移/表示の場合、既存データを、入力フォーム(タイトル、本文)へセットする
-			$this->request->data = $data;
+			$this->request->data = $post;
 		}
 	}
 
@@ -157,7 +159,7 @@ class PostsController extends AppController {
 	public function delete() {
 
 		if ($this->request->is('get')) {
-			throw new InternalErrorException('記事の削除に失敗しました');
+			throw new MethodNotAllowedException();
 		}
 
 		if (!array_key_exists('post_id', $this->request->data)) {
@@ -180,9 +182,9 @@ class PostsController extends AppController {
 		}
 		
 		if ($del_success_flg) {
-			$this->Flash->success('記事が正常に削除されました');
+			$this->Flash->success('The post has been deleted.');
 		} else {
-			$this->Flash->error(__('記事の削除に失敗しました'));
+			$this->Flash->error(__('The post could not be deleted. Please, try again.'));
 		}
 
 		return $this->redirect($this->referer());
@@ -211,7 +213,7 @@ class PostsController extends AppController {
 
 	public function mypage_index() {
 
-		// 公開記事
+		// デフォルトは公開記事を表示
 		$this->paginate = array(
 			'findType' => 'existPosts'
 		   ,'conditions' => array(
@@ -221,7 +223,8 @@ class PostsController extends AppController {
 		   ,'limit' => PAGINATE_LIMIT
 		);
 
-		$this->set('posts_publish', $this->paginate());
+		$posts_publish = $this->paginate();
+		$this->set(compact('posts_publish'));
 	}
 
 
@@ -257,19 +260,16 @@ class PostsController extends AppController {
         $condition1 = array('user_id' => $this->Auth->user('id'));
         $condition2 = array();
 
-        if ($this->request->data['kind_of_post'] == "publish_post") 
-        {
+        if ($this->request->data['kind_of_post'] == "publish_post") {
         	$condition2 = array('publish_flag' => 1);
-        }
-        elseif ($this->request->data['kind_of_post'] == "draft_post")
-        {
+
+        } elseif ($this->request->data['kind_of_post'] == "draft_post") {
         	$condition2 = array('publish_flag' => 0);
-        }
-        elseif ($this->request->data['kind_of_post'] == "all_post") 
-        {
-        }
-        else 
-        {
+
+        } elseif ($this->request->data['kind_of_post'] == "all_post") {
+
+        } else {
+
         }
 
         $conditions = array_merge($condition1, $condition2);
@@ -289,32 +289,34 @@ class PostsController extends AppController {
 		$this->loadModel('Category');
 		$this->loadModel('Tag');
 		$this->loadModel('Image');
-		$this->set('categories', $this->Category->find('list',
-													array ('fields' => array('Category.id', 'Category.category_name'))));
-		$this->set('tags', $this->Tag->find('list',
-											array ('fields' => array('Tag.id', 'Tag.tag_name'))));
 
+		$categories = $this->Category->find('list', array('fields' => array('Category.id', 'Category.category_name')));
+		$tags = $this->Tag->find('list', array('fields' => array('Tag.id', 'Tag.tag_name')));
+
+		$this->set(compact('categories', 'tags'));
 	}
 
 	private function set_archives() {
 
 		$this->Post->virtualFields['cnt_of_post'] = 'COUNT(*)';
 		$this->Post->recursive = -1;
-		$data = $this->Post->find('all',array(
-												'fields' => array('created_year', 'cnt_of_post')
-											   ,'conditions' => array('delete_flag' => 0, 'publish_flag' => 1)
-											   ,'group' => 'created_year'
-											   ,'order' => 'created_year DESC'
-									  ));
 
-		$this->set('created_years', $data);
+		$created_years = $this->Post->find('all',array(
+			'fields' => array('created_year', 'cnt_of_post')
+		   ,'conditions' => array('delete_flag' => 0, 'publish_flag' => 1)
+		   ,'group' => 'created_year'
+		   ,'order' => 'created_year DESC'
+			)
+		);
+
+		$this->set(compact('created_years'));
 	}
 
 	private function rm_empty_imgArray() {
 
-		$count = count($this->request->data['Image']);
-		for ($i = 0; $i < $count; $i++) {
-			if ($this->request->data['Image'][$i]['file_name']['name'] === "") {
+		foreach($this->request->data['Image'] as $i => $image) {
+
+			if ($image['file_name']['name'] === "") {
 				unset($this->request->data['Image'][$i]);
 			}
 		}
