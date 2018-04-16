@@ -1,5 +1,4 @@
 <?php
-// ACL
 
 App::uses('AppController', 'Controller');
 
@@ -15,7 +14,8 @@ class TagsController extends AppController {
 
 	public function index() {
 		$this->Tag->recursive = 0;
-		$this->set('tags', $this->Paginator->paginate());
+		$tags = $this->Paginator->paginate();
+		$this->set(compact('tags'));
 	}
 
 
@@ -23,8 +23,12 @@ class TagsController extends AppController {
 		if (!$this->Tag->exists($id)) {
 			throw new NotFoundException(__('Invalid tag'));
 		}
-		$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id));
-		$this->set('tag', $this->Tag->find('first', $options));
+		$options = array('conditions' => array(
+			'Tag.' . $this->Tag->primaryKey => $id
+			)
+		);
+		$tag = $this->Tag->find('first', $options);
+		$this->set(compact('tag'));
 	}
 
 
@@ -53,18 +57,26 @@ class TagsController extends AppController {
 				$this->Flash->error(__('The tag could not be saved. Please, try again.'));
 			}
 		} else {
-			$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id));
+			$options = array('conditions' => array(
+				'Tag.' . $this->Tag->primaryKey => $id
+				)
+			);
 			$this->request->data = $this->Tag->find('first', $options);
 		}
 	}
 
 
 	public function delete($id = null) {
+
+		if (!$this->request->is(array('post', 'delete'))) {
+			throw new MethodNotAllowedException();
+		}
+
 		$this->Tag->id = $id;
 		if (!$this->Tag->exists()) {
 			throw new NotFoundException(__('Invalid tag'));
 		}
-		$this->request->allowMethod('post', 'delete');
+
 		if ($this->Tag->delete()) {
 			$this->Flash->success(__('The tag has been deleted.'));
 		} else {

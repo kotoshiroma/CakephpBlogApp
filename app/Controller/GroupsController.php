@@ -12,7 +12,9 @@ class GroupsController extends AppController {
 
 	public function index() {
 		$this->Group->recursive = 0;
-		$this->set('groups', $this->Paginator->paginate());
+
+		$groups = $this->Paginator->paginate();
+		$this->set(compact('groups'));
 	}
 
 
@@ -20,8 +22,12 @@ class GroupsController extends AppController {
 		if (!$this->Group->exists($id)) {
 			throw new NotFoundException(__('Invalid group'));
 		}
-		$options = array('conditions' => array('Group.' . $this->Group->primaryKey => $id));
-		$this->set('group', $this->Group->find('first', $options));
+		$options = array('conditions' => array(
+			'Group.' . $this->Group->primaryKey => $id
+			)
+		);
+		$group = $this->Group->find('first', $options);
+		$this->set(compact('group'));
 	}
 
 
@@ -50,18 +56,26 @@ class GroupsController extends AppController {
 				$this->Flash->error(__('The group could not be saved. Please, try again.'));
 			}
 		} else {
-			$options = array('conditions' => array('Group.' . $this->Group->primaryKey => $id));
+			$options = array('conditions' => array(
+				'Group.' . $this->Group->primaryKey => $id
+				)
+			);
 			$this->request->data = $this->Group->find('first', $options);
 		}
 	}
 
 
 	public function delete($id = null) {
+
+		if (!$this->request->is(array('post', 'delete'))) {
+			throw new MethodNotAllowedException();
+		}
+
 		$this->Group->id = $id;
 		if (!$this->Group->exists()) {
 			throw new NotFoundException(__('Invalid group'));
 		}
-		$this->request->allowMethod('post', 'delete');
+
 		if ($this->Group->delete()) {
 			$this->Flash->success(__('The group has been deleted.'));
 		} else {

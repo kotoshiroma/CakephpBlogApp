@@ -75,7 +75,6 @@ class PostsController extends AppController {
 
 			// 画像配列が空の場合、リクエストデータから取り除く
 			$this->rm_empty_imgArray();
-			debug($this->request->data['Image']);
 
 			$this->Post->create();
 			if ($this->Post->saveAll($this->request->data)) {
@@ -274,10 +273,11 @@ class PostsController extends AppController {
 
         $conditions = array_merge($condition1, $condition2);
 
-		$this->paginate = array('findType' => 'existPosts'
-							   ,'conditions' => $conditions
-							   ,'limit' => PAGINATE_LIMIT
-							   );
+		$this->paginate = array(
+			'findType' => 'existPosts'
+		   ,'conditions' => $conditions
+		   ,'limit' => PAGINATE_LIMIT
+		);
 
         $this->RequestHandler->respondAs('application/json; charset=UTF-8');
         return json_encode($this->paginate());
@@ -290,8 +290,14 @@ class PostsController extends AppController {
 		$this->loadModel('Tag');
 		$this->loadModel('Image');
 
-		$categories = $this->Category->find('list', array('fields' => array('Category.id', 'Category.category_name')));
-		$tags = $this->Tag->find('list', array('fields' => array('Tag.id', 'Tag.tag_name')));
+		$categories = $this->Category->find('list', array(
+			'fields' => array('Category.id', 'Category.category_name')
+			)
+		);
+		$tags = $this->Tag->find('list', array(
+			'fields' => array('Tag.id', 'Tag.tag_name')
+			)
+		);
 
 		$this->set(compact('categories', 'tags'));
 	}

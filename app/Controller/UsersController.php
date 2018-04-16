@@ -1,11 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
-/**
- * Users Controller
- *
- * @property User $User
- * @property PaginatorComponent $Paginator
- */
+
 class UsersController extends AppController {
 
 	public $components = array('Paginator', 'RequestHandler');
@@ -21,13 +16,13 @@ class UsersController extends AppController {
 	        if ($this->Auth->login()) {
 	            return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
 	        } else {
-	        	$this->Session->setFlash(__('Your username or password was incorrect.'), 'default', array('class' => 'flash_msg'));
+	        	$this->Session->setFlash(__('Your username or password was incorrect.'), 'default', array('class' => 'alert alert-danger'));
 	        }
 	    }
 	}
 
 	public function logout() {
-		$this->Session->setFlash(__('Good-Bye'), 'default', array('class' => 'flash_msg'));
+		// $this->Session->setFlash(__('Good-Bye'), 'default', array('class' => 'alert alert-success'));
 		$this->redirect($this->Auth->logout());
 	}
 
@@ -36,7 +31,8 @@ class UsersController extends AppController {
 	public function index() {
 		$this->User->recursive = 0;
 		$this->Paginator->settings = array('conditions' => array('User.delete_flag' => 0));
-		$this->set('users', $this->Paginator->paginate());
+		$users = $this->Paginator->paginate();
+		$this->set(compact('users'));
 	}
 
 
@@ -45,7 +41,8 @@ class UsersController extends AppController {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
-		$this->set('user', $this->User->find('first', $options));
+		$user = $this->User->find('first', $options);
+		$this->set(compact('user'));
 	}
 
 	public function add() {
@@ -84,12 +81,16 @@ class UsersController extends AppController {
 
 
 	public function delete($id = null) {
+
+		if (!$this->request->is(array('post', 'delete'))) {
+			throw new MethodNotAllowedException();
+		}
+
 		$this->User->id = $id;
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));
 		}
-		$this->request->allowMethod('post', 'delete');
-		// if ($this->User->delete()) {
+
 		if ($this->User->save(array('delete_flag' => 1))) {
 			$this->Flash->success(__('The user has been deleted.'));
 		} else {
@@ -106,8 +107,10 @@ class UsersController extends AppController {
         }
 
         $this->loadModel('PostCode');
-        $data = $this->PostCode->find('first', array('conditions' =>
-                                            array('post_code' => $this->request->data['post_code'])));
+        $data = $this->PostCode->find('first', array(
+        	'conditions' => array('post_code' => $this->request->data['post_code'])
+        	)
+    	);
 
         $this->RequestHandler->respondAs('application/json; charset=UTF-8');
         return json_encode($data);

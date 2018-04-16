@@ -15,15 +15,20 @@ class CategoriesController extends AppController {
 
 	public function index() {
 		$this->Category->recursive = 0;
-		$this->set('categories', $this->Paginator->paginate());
+		$categories = $this->Paginator->paginate();
+		$this->set(compact('categories'));
 	}
 
 	public function view($id = null) {
 		if (!$this->Category->exists($id)) {
 			throw new NotFoundException(__('Invalid category'));
 		}
-		$options = array('conditions' => array('Category.' . $this->Category->primaryKey => $id));
-		$this->set('category', $this->Category->find('first', $options));
+		$options = array('conditions' => array(
+			'Category.' . $this->Category->primaryKey => $id
+			)
+		);
+		$category = $this->Category->find('first', $options);
+		$this->set(compact('category'));
 	}
 
 
@@ -52,18 +57,26 @@ class CategoriesController extends AppController {
 				$this->Flash->error(__('The category could not be saved. Please, try again.'));
 			}
 		} else {
-			$options = array('conditions' => array('Category.' . $this->Category->primaryKey => $id));
+			$options = array('conditions' => array(
+				'Category.' . $this->Category->primaryKey => $id
+				)
+			);
 			$this->request->data = $this->Category->find('first', $options);
 		}
 	}
 
 
 	public function delete($id = null) {
+
+		if (!$this->request->is(array('post', 'delete'))) {
+			throw new MethodNotAllowedException();
+		}
+
 		$this->Category->id = $id;
 		if (!$this->Category->exists()) {
 			throw new NotFoundException(__('Invalid category'));
 		}
-		$this->request->allowMethod('post', 'delete');
+
 		if ($this->Category->delete()) {
 			$this->Flash->success(__('The category has been deleted.'));
 		} else {
