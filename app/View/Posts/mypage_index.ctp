@@ -20,7 +20,7 @@
 
             <form action="/posts/delete" method="post">
                 <div class="floatContainer">
-                        <button type="submit" class="btn btn-warning btn_xl float_right">
+                        <button id="btn-post-delete" type="submit" class="btn btn-warning btn_xl float_right" disabled>
                             <i class="fas fa-trash fa-fw"></i>
                             チェックした記事を削除
                         </button>
@@ -42,7 +42,7 @@
                         <tbody>
                             <?php foreach ($posts_publish as $post): ?>
                             <tr>
-                                <td><input type="checkbox" name="post_id[]" value="<?php echo $post['Post']['id']; ?>"></td>
+                                <td><input class="chkbox" type="checkbox" name="post_id[]" value="<?php echo $post['Post']['id']; ?>"></td>
                                 <td><?php echo h($post['Post']['title']); ?>&nbsp;</td>
                                 <td>
                                     <?php echo $this->Html->link(__('Edit')
@@ -65,3 +65,23 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function(){
+
+    $(document).on('change', '.chkbox', function(){
+
+        if ($('.chkbox:checked').length > 0) {
+
+            $('#btn-post-delete').prop('disabled', false);
+        } else {
+            
+            $('#btn-post-delete').prop('disabled', true );
+        }
+    });
+
+    $(document).on('click', '#btn-post-delete', function(){
+        window.alert('削除してよろしいですか？');
+    });
+});
+</script>
+

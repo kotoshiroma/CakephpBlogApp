@@ -20,7 +20,7 @@ $(document).ready(function(){
                 var tr = $('<tr></tr>');
 
                 var td1 = $('<td></td>');
-                var chk = $('<input type="checkbox" name="post_id[]" >');
+                var chk = $('<input class="chkbox" type="checkbox" name="post_id[]" >');
                 chk.val(item.Post.id);
                 td1.append(chk);
                 tr.append(td1);
