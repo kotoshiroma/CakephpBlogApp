@@ -3,21 +3,21 @@
 
 <div class="container-fluid centering">
 	<div class="row">
-		<div class="col-sm-8 posts index">
+		<div class="col-sm-8 main-column">
 			
 			<?php foreach ($posts as $post): ?>
 				<div class="post">
-					<p class="post_date"><?php echo h($post['Post']['created_fmt']); ?>&nbsp;by <?php echo h($post['User']['username']) ?></p>
-			        <h3 class="post_title">
+					<p class="post__date"><?php echo h($post['Post']['created_fmt']); ?>&nbsp;by <?php echo h($post['User']['username']) ?></p>
+			        <h3 class="post__title">
 			        	<strong><?php echo $this->Html->link(h($post['Post']['title']), array('action' => 'view', $post['Post']['id'])); ?></strong>
 			        </h3>
 
-			        <div class="post_body_index">
+			        <div class="post__body-index">
 	        			<?php
 	        				if ($post['Image']) {
 	        					$baseUrl = $this->Html->url('/files/image/file_name/');
 	        					$image = $post['Image'][0];
-								echo $this->Html->image($baseUrl.$image['dir'].'/'.$image['file_name'], array('class' => 'img_index'));
+								echo $this->Html->image($baseUrl.$image['dir'].'/'.$image['file_name'], array('class' => 'post__img-index'));
 	        				}
 	        			?>
 			        	<?php

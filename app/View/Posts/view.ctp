@@ -7,10 +7,17 @@
     <div class="row">
         <div class="col-sm-8 posts view">
 
-            <p class="post_date"><?php echo h($post['Post']['created_fmt']); ?>&nbsp;by <?php echo h($post['User']['username']) ?></p>
-            <h3 class="post_title"><strong><?php echo h($post['Post']['title']); ?></strong></h3>
+            <p class="post__date"><?php echo h($post['Post']['created_fmt']); ?>&nbsp;by <?php echo h($post['User']['username']) ?></p>
+            <h3 class="post__title"><strong><?php echo h($post['Post']['title']); ?></strong></h3>
 
-        	<div class="post_body">
+            <?php 
+                echo $this->Html->link($post['Category']['category_name']
+                    , array('action' => 'index'
+                    ,'?' => array('category_id' => $post['Category']['id']))
+                    , array('class' => 'btn btn-xs btn-default margin-l-S margin-t-XS')
+                ); 
+            ?>
+        	<div class="post__body">
                 <?php echo h($post['Post']['body']); ?>
                 &nbsp;
         	</div>
@@ -31,17 +38,6 @@
         	</div>
 
         	<dl>
-                <dt>
-                    <?php echo __('Categories'); ?>
-                </dt>
-                <dd>
-                    <?php echo $this->Html->link($post['Category']['category_name']
-                                                , array('action' => 'index'
-                                                ,'?' => array('category_id' => $post['Category']['id']))
-                                                , array('class' => 'btn btn-xs btn-info')); ?>
-                    &nbsp;
-                </dd>
-
                 <dt>
                     <?php echo __('Tags'); ?>
                 </dt>

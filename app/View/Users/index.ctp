@@ -1,10 +1,9 @@
 <?php echo $this->Html->script('jquery-1.12.4', array('inline' => false)); ?>
 <?php echo $this->Html->script('bootstrap'); ?>
 
-<div class="container users index">
+<div class="container-fluid centering">
 
 	<h2 class="table_title"><?php echo __('Users'); ?></h2>
-	<!-- <?php echo $this->Html->link(__('Add User'), array('action' => 'add'), array('class' => 'btn btn-success btn_add')); ?> -->
 
 	<div class="table-responsive" style="clear: both;">
 		<table class="table table-striped table-hover" >
