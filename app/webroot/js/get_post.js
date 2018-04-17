@@ -13,7 +13,6 @@ $(document).ready(function(){
         .done(function(data){
 
             $('#posts_table_pane table tbody tr').remove();
-            $('#posts_table_pane table tbody tr').remove();
 
             data.forEach(function(item) {
 
