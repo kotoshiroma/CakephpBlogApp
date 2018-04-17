@@ -43,16 +43,18 @@
                             <?php foreach ($posts_publish as $post): ?>
                             <tr>
                                 <td><input class="chkbox" type="checkbox" name="post_id[]" value="<?php echo $post['Post']['id']; ?>"></td>
-                                <td><?php echo h($post['Post']['title']); ?>&nbsp;</td>
+                                <td><?php echo h($post['Post']['title']); ?></td>
                                 <td>
-                                    <?php echo $this->Html->link(__('Edit')
-                                                                 , array('action' => 'edit', $post['Post']['id'])
-                                                                 , array('class' => 'btn btn-primary btn-xs'
-                                                                 )); ?>
+                                    <?php 
+                                        echo $this->Html->link(__('Edit')
+                                            , array('action' => 'edit', $post['Post']['id'])
+                                            , array('class' => 'btn btn-primary btn-xs')
+                                        ); 
+                                    ?>
                                 </td>
-                                <td><?php echo h($post['Category']['category_name']); ?>&nbsp;</td>
-                                <td></td>
-                                <td><?php echo h($post['Post']['created_fmt']); ?>&nbsp;</td>
+                                <td><?php echo h($post['Category']['category_name']); ?></td>
+                                <td><?php echo count($post['Comment']); ?></td>
+                                <td><?php echo h($post['Post']['created_fmt']); ?></td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>

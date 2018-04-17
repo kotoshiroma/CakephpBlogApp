@@ -42,6 +42,7 @@ $(document).ready(function(){
                 tr.append(td4);
 
                 var td5 = $('<td></td>');
+                td5.text(item.Comment.length);
                 tr.append(td5);
 
                 var td6 = $('<td></td>');
