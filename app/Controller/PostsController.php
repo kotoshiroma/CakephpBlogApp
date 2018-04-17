@@ -42,7 +42,8 @@ class PostsController extends AppController {
 			$this->set(compact('posts'));
 		}
 
-		$this->set_categories_and_tags();
+		$this->set_categories();
+		$this->set_tags();
 		$this->set_archives();
 	}
 
@@ -55,13 +56,15 @@ class PostsController extends AppController {
 		$options = array('conditions' => array('Post.' . $this->Post->primaryKey => $id));
 		$post = $this->Post->find('first', $options);
 		$this->set(compact('post'));
-		$this->set_categories_and_tags();
+		$this->set_categories();
+		$this->set_tags();
 		$this->set_archives();
 	}
 
 
 	public function add() {
-		$this->set_categories_and_tags();
+		$this->set_categories();
+		$this->set_tags();
 
 		if ($this->request->is('post')) {
 
@@ -101,7 +104,8 @@ class PostsController extends AppController {
 			$tagVal[] = intval($tag['id']);
 		}
 		$this->set(compact('post', 'tagVal'));
-		$this->set_categories_and_tags();
+		$this->set_categories();
+		$this->set_tags();
 
 
 		// 編集データがフォームから送信されてきた場合
@@ -284,22 +288,26 @@ class PostsController extends AppController {
     }
 
 /* privateメソッド --------------------------------------------------------------------------------- */
-	private function set_categories_and_tags() {
+	private function set_categories() {
 
 		$this->loadModel('Category');
-		$this->loadModel('Tag');
-		$this->loadModel('Image');
-
 		$categories = $this->Category->find('list', array(
 			'fields' => array('Category.id', 'Category.category_name')
 			)
 		);
+
+		$this->set(compact('categories'));
+	}
+
+	private function set_tags() {
+
+		$this->loadModel('Tag');
 		$tags = $this->Tag->find('list', array(
 			'fields' => array('Tag.id', 'Tag.tag_name')
 			)
 		);
 
-		$this->set(compact('categories', 'tags'));
+		$this->set(compact('tags'));
 	}
 
 	private function set_archives() {
