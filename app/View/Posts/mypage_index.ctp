@@ -20,7 +20,7 @@
 
             <form action="/posts/delete" method="post">
                 <div class="floatContainer">
-                        <button id="btn-post-delete" type="submit" class="btn btn-warning btn_xl float_right" disabled>
+                        <button id="btn-post-delete" type="submit" class="btn btn-warning btn_xl float-r" disabled>
                             <i class="fas fa-trash fa-fw"></i>
                             チェックした記事を削除
                         </button>

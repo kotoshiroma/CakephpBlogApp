@@ -1,7 +1,7 @@
 <?php echo $this->Html->script('jquery-1.12.4', array('inline' => false)); ?>
 <?php echo $this->Html->script('bootstrap'); ?>
 
-<div class="container-fluid centering tags form">
+<div class="container-fluid centering">
 	<?php echo $this->Form->create('Tag', array('novalidate' => true)); ?>
 		<fieldset>
 			<legend><?php echo __('Edit Tag'); ?></legend>

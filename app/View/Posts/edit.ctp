@@ -12,9 +12,17 @@
 				<legend><?php echo __('Edit Post'); ?></legend>
 				<?php
 					echo $this->Form->input('id');
-					
-					echo $this->Form->input('title', array('label' => __('title')));
-					echo $this->Form->input('body', array('label' => __('body')));
+
+					echo $this->Form->input('title', array(
+						 'label' => __('title')
+						,'div' => array('class' => 'input-div')
+						)
+					);
+					echo $this->Form->input('body', array(
+						'label' => __('body')
+						,'div' => array('class' => 'input-div')
+						)
+					);
 				?>
 
 				<?php echo $this->element('form_add_img'); ?>
@@ -35,25 +43,25 @@
 					
 				</div>
 
-				<div class="categories categories_edit">
 				<?php
-					echo $this->Form->input('category_id', array ('label' => __('Categories')
-																 ,'multiple' => 'select'
-																 ,'empty' => '未選択'
-																 ,'div' => false
-		 													 ));
+                    echo $this->Form->input('category_id', array(
+                    	 'class' => 'input-select-category'
+                        ,'multiple' => 'select'
+                        ,'empty' => '未選択'
+                        ,'label' => __('Categories')
+                        ,'div' => array('class' => 'input-div')
+                        )
+                    );
+
+					echo $this->Form->input('Tag.tag_id', array (
+						 'class' => 'checkbox checkbox_tag_edit'
+						,'multiple' => 'checkbox'
+						,'selected' => $tagVal
+						,'label' => array(__('Tags'), 'id' => 'tagG_label')
+						,'div' => array('class' => 'input-div floatContainer')
+						)
+					);
 				?>
-				</div>
-				<div class="tags floatContainer">
-				<?php
-					echo $this->Form->input('Tag.tag_id', array ('label' => array(__('Tags'), 'id' => 'tagG_label')
-														        ,'multiple' => 'checkbox'
-														     	,'selected' => $tagVal
-														     	,'class' => 'checkbox checkbox_tag_edit'
-														     	,'div' => false
-														     ));
-				?>
-				</div>
 			</fieldset>
 
 			<?php echo $this->element('save_post_buttons_selector'); ?>

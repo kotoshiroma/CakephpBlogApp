@@ -13,30 +13,36 @@
 				<?php
 					echo $this->Form->input('user_id', array('type' => 'hidden', 'value' => $auth->user('id')));
 					
-					echo $this->Form->input('title', array('label' => __('title')));
-					echo $this->Form->input('body', array('label' => __('body')));
-				?>
+					echo $this->Form->input('title', array(
+						 'label' => __('title')
+						,'div' => array('class' => 'input-div')
+						)
+					);
+					echo $this->Form->input('body', array(
+						'label' => __('body')
+						,'div' => array('class' => 'input-div')
+						)
+					);
 
-				<?php echo $this->element('form_add_img'); ?>
+					echo $this->element('form_add_img');
 
-				<div class="categories categories_edit">
-				<?php
-					echo $this->Form->input('category_id', array ('label' => __('Categories')
-																 ,'multiple' => 'select'
-																 ,'empty' => '未選択'
-																 ,'div' => false
-		 													 ));
+                    echo $this->Form->input('category_id', array(
+                    	 'class' => 'input-select-category'
+                        ,'multiple' => 'select'
+                        ,'empty' => '未選択'
+                        ,'label' => __('Categories')
+                        ,'div' => array('class' => 'input-div')
+                        )
+                    );
+
+					echo $this->Form->input('Tag.tag_id', array (
+						 'class' => 'checkbox checkbox_tag_add'
+						,'multiple' => 'checkbox'
+						,'label' => array(__('Tags'), 'id' => 'tagG_label')
+						,'div' => array('class' => 'input-div floatContainer')
+						)
+					);
 				?>
-				</div>
-				<div class="tags floatContainer">
-				<?php
-					echo $this->Form->input('Tag.tag_id', array ('label' => array(__('Tags'), 'id' => 'tagG_label')
-														        ,'multiple' => 'checkbox'
-														     	,'class' => 'checkbox checkbox_tag_add'
-														     	,'div' => false
-														     ));
-				?>
-				</div>
 			</fieldset>
 
 			<?php echo $this->element('save_post_buttons_selector'); ?>

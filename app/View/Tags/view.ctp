@@ -1,7 +1,7 @@
 <?php echo $this->Html->script('jquery-1.12.4', array('inline' => false)); ?>
 <?php echo $this->Html->script('bootstrap'); ?>
 
-<div class="container-fluid centering tags view">
+<div class="container-fluid centering">
 
 	<h2 class="table_title"><?php echo h($tag['Tag']['tag_name']); ?></h2>
 
