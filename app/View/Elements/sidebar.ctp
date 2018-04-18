@@ -43,9 +43,17 @@
         <h3><?php echo __('Archives'); ?></h3>
         <ul>
             <?php foreach($created_years as $created_year): ?>
-                <li><?php echo $this->Html->link($created_year['Post']['created_year'].' ('.$created_year['Post']['cnt_of_post'].') ',
-                                                 array('action' => 'index', 
-                                                       '?' => array('year' => $created_year['Post']['created_year']))); ?>
+                <li><?php
+                        echo $this->Html->link(
+                             $created_year['Post']['created_year'].' ('.$created_year['Post']['cnt_of_post'].') '
+                            ,array(
+                                 'action' => 'index'
+                                ,'?' => array(
+                                    'year' => $created_year['Post']['created_year']
+                                )
+                            )
+                        );
+                    ?>
                 </li>
             <?php endforeach; ?>
         </ul>
