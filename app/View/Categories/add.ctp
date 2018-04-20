@@ -7,7 +7,11 @@
 		<fieldset>
 			<legend><?php echo __('Add Category'); ?></legend>
 			<?php 
-				echo $this->Form->input('category_name');
+				echo $this->Form->input('category_name', array(
+                     'class' => 'input-form'
+                    ,'div' => array('class' => 'input-div')
+                    )
+                );
 			?>
 		</fieldset>
 	<?php echo $this->Form->end(array('label' => __('Save'), 'class' => 'btn btn-primary btn_s')); ?>
