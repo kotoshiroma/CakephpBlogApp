@@ -14,12 +14,14 @@
 					echo $this->Form->input('id');
 
 					echo $this->Form->input('title', array(
-						 'label' => __('title')
+						 'class' => 'input-form'
+						,'label' => __('title')
 						,'div' => array('class' => 'input-div')
 						)
 					);
 					echo $this->Form->input('body', array(
-						'label' => __('body')
+						 'class' => 'input-form'
+						,'label' => __('body')
 						,'div' => array('class' => 'input-div')
 						)
 					);
@@ -28,13 +30,14 @@
 				<?php echo $this->element('form_add_img'); ?>
 
 
-				<div class="images floatContainer">
+				<div class="floatContainer margin-b-L">
 					<?php $baseUrl = $this->Html->url('/files/image/file_name/'); ?>
 
 					<?php foreach ($post['Image'] as $image): ?>
 						<div style="float: left; margin-right: 10px;">
 					        <?PHP echo $this->Html->image($baseUrl.$image['dir'].'/thumb_'.$image['file_name']); ?>
-		 					<div class="checkbox">
+		 					<!-- <div class="checkbox"> -->
+		 					<div class="margin-t-S">
 					            <input type="checkbox" name="chkBox[]" value="<?php echo $image['id']?>" id="<?php echo $image['id']?>">
 					            <label for="<?php echo $image['id']?>"><?php echo __('Delete'); ?></label>
 					        </div>
@@ -54,11 +57,11 @@
                     );
 
 					echo $this->Form->input('Tag.tag_id', array (
-						 'class' => 'checkbox checkbox_tag_edit'
+						 'class' => 'checkbox--inline'
 						,'multiple' => 'checkbox'
 						,'selected' => $tagVal
-						,'label' => array(__('Tags'), 'id' => 'tagG_label')
-						,'div' => array('class' => 'input-div floatContainer')
+						,'label' => array(__('Tags'), 'class' => 'checkbox-heading')
+						,'div' => array('class' => 'input-div')
 						)
 					);
 				?>

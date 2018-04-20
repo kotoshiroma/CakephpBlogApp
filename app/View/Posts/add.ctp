@@ -14,12 +14,14 @@
 					echo $this->Form->input('user_id', array('type' => 'hidden', 'value' => $auth->user('id')));
 					
 					echo $this->Form->input('title', array(
-						 'label' => __('title')
+                         'class' => 'input-form'
+						,'label' => __('title')
 						,'div' => array('class' => 'input-div')
 						)
 					);
 					echo $this->Form->input('body', array(
-						'label' => __('body')
+                         'class' => 'input-form'
+						,'label' => __('body')
 						,'div' => array('class' => 'input-div')
 						)
 					);
@@ -36,10 +38,10 @@
                     );
 
 					echo $this->Form->input('Tag.tag_id', array (
-						 'class' => 'checkbox checkbox_tag_add'
+						 'class' => 'checkbox--inline'
 						,'multiple' => 'checkbox'
-						,'label' => array(__('Tags'), 'id' => 'tagG_label')
-						,'div' => array('class' => 'input-div floatContainer')
+						,'label' => array(__('Tags'), 'class' => 'checkbox-heading')
+						,'div' => array('class' => 'input-div')
 						)
 					);
 				?>
