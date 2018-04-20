@@ -40,6 +40,7 @@ class CategoriesController extends AppController {
 				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Flash->error(__('The category could not be saved. Please, try again.'));
+				return $this->redirect(array('action' => 'index'));
 			}
 		}
 	}

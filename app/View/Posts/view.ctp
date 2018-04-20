@@ -1,6 +1,6 @@
 <?php echo $this->Html->script('jquery-1.12.4', array('inline' => false)); ?>
 <?php echo $this->Html->script('modal_window', array('inline' => false)); ?>
-<?php echo $this->Html->script('popup_comment', array('inline' => false)); ?>
+<?php echo $this->Html->script('popup', array('inline' => false)); ?>
 <?php echo $this->Html->script('bootstrap'); ?>
 
 <div class="container-fluid centering">
@@ -26,9 +26,13 @@
         			<?php $baseUrl = $this->Html->url('/files/image/file_name/'); ?>
         			<?php foreach ($post['Image'] as $image): ?>
                         <a href="#" alt="">
-            				<?php echo $this->Html->image($baseUrl.$image['dir'].'/'.$image['file_name'],
-                                                        array('data_target' => $image['dir'],
-                                                              'class' => 'modal_open img_view'));
+            				<?php
+                                echo $this->Html->image($baseUrl.$image['dir'].'/'.$image['file_name']
+                                    ,array(
+                                         'data_target' => $image['dir']
+                                        ,'class' => 'modal_open img_view'
+                                    )
+                                );
             				?>
                         </a>
         			<?php endforeach; ?>
@@ -67,56 +71,68 @@
                 <?php endforeach; ?>
             </div>
 
-            <!-- コメントを書く -->
-            <div>
-                <button id="popup_comment_open" class="btn btn-default"><?php echo __('Write Comment'); ?></button>
-            </div>
-
-            <div id="popup_comment">
-                <div class="floatContainer">
-                    <i class="far fa-window-close popup_close_icon"></i>
+            <!-- ポップアップ領域(開始) -->
+            <div class="popup-wrapper">
+                <!-- コメントを書くボタン -->
+                <div>
+                    <?php
+                        echo $this->Form->button(__('Write Comment'), array(
+                             'id' => 'write-comment'
+                            ,'class' => 'popup-open btn btn-default'
+                            )
+                        );
+                    ?>
                 </div>
+                <!-- コメントポップアップ -->
+                <div class="popup popup--position-1" id="popup-write-comment">
+                    <div class="floatContainer">
+                        <i class="far fa-window-close popup-close-icon"></i>
+                    </div>
 
-                <?php 
-                    echo $this->Form->create(
-                        'Comment', 
-                        array(
-                            'url' => array('controller' => 'posts', 'action' => 'add_comment'), 
-                            'novalidate' => true
-                        )
-                    ); 
-                ?>
-
-                    <?php echo $this->Form->input('Comment.user_id', array('type' => 'hidden', 'value' => $auth->user('id'))); ?>
-                    <?php echo $this->Form->input('Comment.post_id', array('type' => 'hidden', 'value' => $post['Post']['id'])); ?>
-                    <table class="">
-                        <tbody>
-                            <tr>
-                                <th>
-                                    <?php echo __('contributor'); ?>
-                                </th>
-                                <td class="contributor">
-                                    <?php echo $this->Form->input('contributor', array('class' => 'form_contributor', 'label' => false, 'div' => false)); ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <?php echo __('comment'); ?>
-                                </th>
-                                <td class="comment">
-                                    <?php echo $this->Form->textarea('comment', array('class' => 'form_comment', 'rows' => '5', 'cols' => '50')); ?>
-                                </td>
-                            </tr>
-                            <tr class="submit">
-                                <td colspan="2" align="center">
-                                    <?php echo $this->Form->button(__('Contribute'), array('class' => 'btn btn-primary btn_m btn_contribute', 'disabled' => true)); ?>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                <?php echo $this->Form->end(); ?>
+                    <?php 
+                        echo $this->Form->create(
+                            'Comment', 
+                            array(
+                                 'url' => array('controller' => 'posts', 'action' => 'add_comment')
+                                ,'novalidate' => true
+                            )
+                        ); 
+                    ?>
+                        <?php echo $this->Form->input('user_id', array('type' => 'hidden', 'value' => $auth->user('id'))); ?>
+                        <?php echo $this->Form->input('post_id', array('type' => 'hidden', 'value' => $post['Post']['id'])); ?>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>
+                                        <?php echo __('contributor'); ?>
+                                    </th>
+                                    <td class="text">
+                                        <?php
+                                            echo $this->Form->text('contributor', array('class' => 'input-form input-text input-popup'));
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <?php echo __('comment'); ?>
+                                    </th>
+                                    <td class="textarea">
+                                        <?php
+                                            echo $this->Form->textarea('comment', array('class' => 'input-form input-textarea input-popup'));
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr class="submit">
+                                    <td colspan="2" align="center">
+                                        <?php echo $this->Form->button(__('Contribute'), array('class' => 'btn btn-primary btn_m submit-popup', 'disabled' => true)); ?>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    <?php echo $this->Form->end(); ?>
+                </div>
             </div>
-
+            <!-- ポップアップ領域(終了) -->
         </div>
 
 
