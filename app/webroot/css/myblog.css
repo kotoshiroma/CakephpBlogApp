@@ -25,7 +25,76 @@ Object
 Component
  再利用可能な小さな共通部品,コンポーネントを定義
 */
+/*-------------------------
+カスタムチェックボックス 
+---------------------------*/
+/* カスタムチェックボックスを使うため、元のチェックボックスは隠す */
+input[type="checkbox"] {
+    visibility: hidden;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    width: 0px;
+    margin: 0px;
+}
 
+/* カスタムチェックボックスとしての擬似要素を挿入*/
+input[type="checkbox"]::before{
+    visibility: visible;
+    content: "";
+    display: block;
+    position: absolute;
+    /*top: 0;*/
+    top: -5px;
+    left: 0px;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #999;
+    border-radius: 0px;
+}
+
+/* チェック時に、チェックマークとしての擬似要素を挿入する */
+input[type="checkbox"]:checked::after{
+    visibility: visible;
+    content: "";
+    display: block;
+    position: absolute;
+    /*top: -7px;*/
+    top: -12px;
+    left: 5px;
+    width: 10px;
+    height: 19px;
+    transform: rotate(40deg);
+    border-bottom: 3px solid #009a9a;
+    border-right: 3px solid #009a9a;
+}
+
+/* チェックチェックボックスのラベル */
+input[type="checkbox"] + label {
+    margin: 0px;
+    padding-left: 23px;
+    font-weight: normal;
+}
+
+/* チェック時にラベルの色も変える */
+input[type="checkbox"]:checked + label { 
+    color: #009a9a;
+}
+
+/* チェックボックスの見出し */
+.checkbox-heading {
+    display: block;
+}
+
+/* チェックボックスを横に並べるスタイル */
+.checkbox--inline {
+    display: inline-block;
+    margin: 0px 10px 10px 0px;
+}
+
+/*-------------------------
+ボタン 
+---------------------------*/
 .btn_s {
     width: 80px;
 }
@@ -41,6 +110,12 @@ Component
 .btn_xl {
     width: 200px;
 }
+
+/* -------------------------------------------------------------- */
+/* 
+Project
+ サイト(プロジェクト)内で再利用できるパターンを定義
+*/
 
 /* container-fluidはBootStrapのクラス */
 .container-fluid {
@@ -58,111 +133,28 @@ Component
     }
 }
 
-input, 
-textarea {
-    padding: 1%;
-    width:98%;
-}
-
-div.checkbox_tag_add,
-div.checkbox_tag_edit {
-    /*float: left;*/
-    display: inline-block;
-    margin: 0px 10px 10px 0px;
-    position:relative;
-}
-
-div.checkbox input{
-    display: none;
-}
-
-div.checkbox label {
-    margin: 0px;
-    padding-left: 25px;
-    /*position:relative;*/
-    /*top: 0;*/
-
-}
-
-div.checkbox label::before{
-    content: "";
-    display: block;
-    /*display: inline-block;*/
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 18px;
-    height: 18px;
-    /*margin-top: 3px; */
-    border: 1px solid #999;
-    border-radius: 0px;
-}
-
-input[type="checkbox"]:checked + label {
-    color: #009a9a;
-}
-
-input[type="checkbox"]:checked + label::after{
-    content: "";
-    display: block;
-    position: absolute;
-    top: -7px;
-    left: 5px;
-    width: 10px;
-    height: 19px;
-    transform: rotate(40deg);
-    border-bottom: 3px solid #009a9a;
-    border-right: 3px solid #009a9a;
-}
-
-
-
-#tagG_label {
-    display: block;
-    /*margin-bottom: 0px;*/
-}
-
-div.margin {
-    margin-top: 10px;
-}
-
+/* dl dt ddの余白を一律に設定 */
 dl {
     margin-bottom: 30px;
 }
 
+dt {
+    margin-bottom: 10px;
+}
+
 dd {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
-
-/* img  */
-/* post-edit */
-div.images {
-    margin-bottom: 40px;
-}
-
-/* float関連  */
-div.floatContainer::after {
-    content: "";
-    display: block;
-    height: 0px;
-    clear: both;    
-}
-
-/* submit  */
-input[type="submit"]#submit_draft {
-    display: none;
-    border-radius: 4px 0px 0px 4px;
-}
-
-/* -------------------------------------------------------------- */
-/* 
-Project
- サイト(プロジェクト)内で再利用できるパターンを定義
-*/
 
 /* フォーム部品の親要素divの余白を一律に設定 */
 .input-div {
     margin: 20px 0px;
+}
+
+/* 入力フォームの幅を一律に設定 */
+.input-form {
+    padding: 1%;
+    width:98%;
 }
 
 /* テキストボックスは、高さを一律で30pxとする */
@@ -181,7 +173,14 @@ select {
     min-width: 150px;
 }
 
-
+/*
+「下書き保存する」ボタン
+　Postのadd.ctp,およびedit.ctpで使用
+*/
+#submit_draft {
+    display: none;
+    border-radius: 4px 0px 0px 4px;
+}
 
 /* -------------------------------------------------------------- */
 /* 
@@ -206,6 +205,14 @@ Utility
     margin-bottom: 10px;
 }
 
+.margin-b-M {
+    margin-bottom: 20px;
+}
+
+.margin-b-L {
+    margin-bottom: 30px;
+}
+
 .margin-l-S {
     margin-left: 10px;
 }
@@ -221,6 +228,30 @@ Utility
 .float-r {
     float: right;
 }
+
+/* クリアフィックス  */
+.floatContainer::after {
+    content: "";
+    display: block;
+    height: 0px;
+    clear: both;    
+}
+
+/*ブロック要素のインライン指定*/
+.--inline-block {
+    display: inline-block;
+}
+
+/*ブロック要素内のインライン要素の位置指定*/
+.--text-align-l {
+    text-align: left;
+}
+
+.--text-align-r {
+    text-align: right;
+}
+
+
 
 /* -------------------------------------------------------------- */
 /*
@@ -536,9 +567,6 @@ select#UserGroupId {
 Posts
  view.ctp
 */
-
-
-
 /*
 コメント欄
 */
@@ -571,62 +599,102 @@ Posts
 }
 
 /*
-コメントポップアップ
+ポップアップ
  */
-div#popup_comment {
-    display: none;
-    border: 1px solid #ddd;
-    padding: 10px;
+.popup-wrapper {
     position: relative;
-    top: -40px;
-    left: -5px;
-    z-index: 1;
-    background-color: white;
 }
 
+/* ポップアップの外枠 */
+.popup {
+    display: none;
+    z-index: 1;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+/* ポップアップの位置 */
+.popup--position-1 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.popup--position-2 {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.popup--position-3 {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+
+.popup--position-4 {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
+
+/* ウィンドウ幅が768px以上の場合 */
 @media (min-width: 768px) {
-    div#popup_comment {
-        width: 75%;
+    .popup {
+        width: 500px;
     }
 }
 
-div#popup_comment table {
-    margin: 0px;
+.popup-close-icon {
+    float: right;
 }
 
-#popup_comment tr {
-    padding: 10px;
+.popup table {
+    margin: 0px;
+    width:100%;
+
+
+}
+
+.popup tr {
     border-bottom: 1px solid #ddd;
 }
 
-#popup_comment tr.submit {
+.popup tr.submit {
     border-bottom: 0px;
 }
 
-#popup_comment th {
-    padding-right: 10px;
+.popup th {
+    /*padding-right: 10px;*/
+    width: 20%;
 }
 
-#popup_comment td.contributor {
+.popup td.text {
     height: 60px;
 }
 
-#popup_comment td.comment {
+.popup td.textarea {
     height: 150px;
 }
 
-#popup_comment tr.submit td {
+.input-textarea {
+    height: 100px;
+}
+
+.popup tr.submit td {
     height: 50px;
 }
 
-#popup_comment textarea {
+.popup textarea {
     
     border: 1px solid #ddd;
 }
 
-.popup_close_icon {
-    float: right;
-}
+
 
 /* 
 モーダルウィンドウ関連
@@ -678,6 +746,7 @@ div.modal_content {
   right: 0px;
 }
 
+
 /* -------------------------------------------------------------- */
 /* 
 Posts
@@ -702,7 +771,11 @@ ul.nav-tabs {
     margin-bottom: 20px;
 }
 
-
+/* -------------------------------------------------------------- */
+/* 
+Categories
+ index.ctp
+*/
 
 
 
