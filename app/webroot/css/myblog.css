@@ -133,6 +133,11 @@ Project
     }
 }
 
+/* 「編集/削除」列(アクション列)の幅を一律に設定 */
+th.actions {
+    width: 100px;
+}
+
 /* dl dt ddの余白を一律に設定 */
 dl {
     margin-bottom: 30px;
