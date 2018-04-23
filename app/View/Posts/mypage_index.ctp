@@ -82,7 +82,12 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '#btn-post-delete', function(){
-        window.alert('削除してよろしいですか？');
+
+        if (confirm("削除してよろしいですか？")) {
+            return true;
+        } else {
+            return false;
+        }
     });
 });
 </script>
