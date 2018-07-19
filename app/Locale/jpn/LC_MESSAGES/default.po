@@ -561,6 +561,9 @@ msgstr "ダッシュボード"
 msgid "Post Management"
 msgstr "記事管理"
 
+msgid "Favorite Post"
+msgstr "お気に入り記事"
+
 #: View/Posts/view.ctp:20
 msgid "by"
 msgstr ""

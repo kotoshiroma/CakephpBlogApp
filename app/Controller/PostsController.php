@@ -59,6 +59,7 @@ class PostsController extends AppController {
 		$this->set_categories();
 		$this->set_tags();
 		$this->set_archives();
+		// debug($post);
 	}
 
 
@@ -252,30 +253,30 @@ class PostsController extends AppController {
 
 /* ajaxメソッド --------------------------------------------------------------------------------- */
 
-    public function get_post() {
+  public function get_post() {
 
-        $this->autoRender = false;
+    $this->autoRender = false;
 
-        if (!$this->request->is('ajax')) {
-            throw new MethodNotAllowedException();
-        }
+    if (!$this->request->is('ajax')) {
+        throw new MethodNotAllowedException();
+    }
 
-        $condition1 = array('user_id' => $this->Auth->user('id'));
-        $condition2 = array();
+    $condition1 = array('user_id' => $this->Auth->user('id'));
+    $condition2 = array();
 
-        if ($this->request->data['kind_of_post'] == "publish_post") {
-        	$condition2 = array('publish_flag' => 1);
+    if ($this->request->data['kind_of_post'] == "publish_post") {
+    	$condition2 = array('publish_flag' => 1);
 
-        } elseif ($this->request->data['kind_of_post'] == "draft_post") {
-        	$condition2 = array('publish_flag' => 0);
+    } elseif ($this->request->data['kind_of_post'] == "draft_post") {
+    	$condition2 = array('publish_flag' => 0);
 
-        } elseif ($this->request->data['kind_of_post'] == "all_post") {
+    } elseif ($this->request->data['kind_of_post'] == "all_post") {
 
-        } else {
+    } else {
 
-        }
+    }
 
-        $conditions = array_merge($condition1, $condition2);
+    $conditions = array_merge($condition1, $condition2);
 
 		$this->paginate = array(
 			'findType' => 'existPosts'
@@ -283,9 +284,9 @@ class PostsController extends AppController {
 		   ,'limit' => PAGINATE_LIMIT
 		);
 
-        $this->RequestHandler->respondAs('application/json; charset=UTF-8');
-        return json_encode($this->paginate());
-    }
+    $this->RequestHandler->respondAs('application/json; charset=UTF-8');
+    return json_encode($this->paginate());
+  }
 
 /* privateメソッド --------------------------------------------------------------------------------- */
 	private function set_categories() {

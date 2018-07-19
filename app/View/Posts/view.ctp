@@ -1,6 +1,7 @@
 <?php echo $this->Html->script('jquery-1.12.4', array('inline' => false)); ?>
 <?php echo $this->Html->script('modal_window', array('inline' => false)); ?>
 <?php echo $this->Html->script('popup', array('inline' => false)); ?>
+<?php echo $this->Html->script('favorite', array('inline' => false)); ?>
 <?php echo $this->Html->script('bootstrap'); ?>
 
 <div class="container-fluid centering">
@@ -56,6 +57,31 @@
                     &nbsp;
                 </dd>
         	</dl>
+
+            <!-- お気に入り -->
+            <?php
+                $is_fav = "0";
+                foreach($post['Favorite'] as $fav) {
+                    if ($fav['user_id'] == $auth->user('id')) {
+                        $is_fav = "1";
+                    }
+                }
+            ?>
+            <?php if ($is_fav == "0") { ?>
+                    <i class="far fa-star"></i>
+
+            <?php }?>
+            <?php
+                echo $this->Form->button('Favorite', array(
+                      'id' => 'btn_favorite'
+                    , 'class' => 'btn btn-default btn-xs margin-b-L'
+                    , 'style' => 'color: rgb(255,150,0);'
+                    , 'data-postid' => $post['Post']['id']
+                    , 'data-userid' => $auth->user('id')
+                    , 'data-is_fav' => $is_fav
+                    )
+                ) 
+            ?>
 
             <!-- コメント欄 -->
             <div class="comments_view">

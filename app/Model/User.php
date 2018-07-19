@@ -131,10 +131,14 @@ class User extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		)
-       ,'Comment' => array (
-            'className' => 'Comment',
-            'foreignKey' => 'user_id',
-        )
+   ,'Comment' => array (
+        'className' => 'Comment',
+        'foreignKey' => 'user_id',
+    )
+   ,'Favorite' => array (
+        'className' => 'Favorite',
+        'foreignKey' => 'user_id',
+    )
 	);
 
 	public function parentNode() {

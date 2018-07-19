@@ -10,6 +10,10 @@
     <?php echo $this->Html->link(__('Post Management'), array('controller' => 'posts', 'action' => 'mypage_index')); ?>
   </li>
   <li>
+    <i class="far fa-star fa-fw"></i>
+    <?php echo $this->Html->link(__('Favorite Post'), array('controller' => 'favorites', 'action' => 'index')); ?>
+  </li>
+  <li>
     <i class="far fa-folder fa-fw"></i>
     <?php echo $this->Html->link(__('Category'), array('controller' => 'categories', 'action' => 'index')); ?>
   </li>

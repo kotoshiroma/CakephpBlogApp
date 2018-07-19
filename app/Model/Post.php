@@ -131,5 +131,9 @@ class Post extends AppModel {
 			 'className' => 'Comment',
 			 'foreignKey' => 'post_id',
 		 )
+		,'Favorite' => array (
+			 'className' => 'Favorite',
+			 'foreignKey' => 'post_id',
+		 )
 	 );
 }
